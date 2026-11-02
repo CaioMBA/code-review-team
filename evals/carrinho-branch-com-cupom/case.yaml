@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: carrinho-branch-com-cupom
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  A banca roda os 4 revisores sobre o diff da branch feature/cupom contra main, roda os testes, e o chefe dá o veredito REPROVADO, com lista única por gravidade citando arquivo:linha. Nenhum arquivo existente é alterado.

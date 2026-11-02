@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: ai-written-reset-branch
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  The panel reviews feature/password-reset against main, runs the tests, flags the hallucinated dependency, the token returned in the API response, weak randomness, token reuse/no expiry check, the save_password stub, the self-mocking test, the duplicated email helper and the out-of-scope format_price change, and gives the verdict REJECTED with one ranked fix list. No existing file is changed. The answer is in English.

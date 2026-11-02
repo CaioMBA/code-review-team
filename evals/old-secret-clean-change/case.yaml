@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: old-secret-clean-change
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  The change on feature/bulk-discount is clean and tested, so the panel gives APPROVED TO SHIP, while listing the hardcoded API key that already existed in config.py on main as an older, non-blocking problem. The answer is in English.

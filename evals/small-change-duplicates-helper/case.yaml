@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: small-change-duplicates-helper
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  For a tiny uncommitted change, the panel still does a full review, finds that the new date_diff_days in report.py duplicates the existing dates.days_between, recommends reusing it, and answers in English.

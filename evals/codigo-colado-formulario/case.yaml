@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: codigo-colado-formulario
+expected_outcome: |
+  A banca revisa o código colado, aponta senha no console, token na URL, XSS via innerHTML, idade NaN e envio duplo, dá veredito REPROVADO e salva o relatório em relatorio.md.
