@@ -5,7 +5,8 @@ Fill this exactly, in the user's language. Skip a section only where noted. Numb
 ```markdown
 # Review panel: <project or branch>
 **What the code does:** <one sentence>
-**Scope reviewed:** <diff / branch vs main / files / pasted code> · **Expected load assumed:** <one user / many users>
+**Scope reviewed:** <diff / branch vs main / files / pasted code> · **Expected load assumed:** <one user / few users / many users, and where that came from>
+**Extra reviewers:** <UI & accessibility / Performance / Data & deploy: joins or not, and why, one short clause each>
 
 ## Verdict: APPROVED TO SHIP | REJECTED
 <one sentence with the main reason>
@@ -34,7 +35,10 @@ Fill this exactly, in the user's language. Skip a section only where noted. Numb
 ### 2. Confused user
 ### 3. Senior engineer
 ### 4. Tester
-<2–5 lines each: what it checked and its key findings; list any new test files created>
+### 5. UI & accessibility
+### 6. Performance
+### 7. Data & deploy
+<2-5 lines each: what it checked and its key findings; list any new test files created. Write sections 5-7 only for reviewers that joined. Add "Used: <helper skills>" only when a reviewer used one; never mention skills that weren't available.>
 
 **Not checked:** <what mattered and couldn't be checked, or "nothing">
 ```
@@ -64,5 +68,8 @@ Use the user's language. Portuguese labels are fixed; for other languages, trans
 | Tool pass | Ferramentas rodadas |
 | Panel notes | Relatórios da banca |
 | Hacker / Confused user / Senior engineer / Tester | Hacker / Usuário confuso / Programador sênior / Testador |
+| UI & accessibility / Performance / Data & deploy | UI e acessibilidade / Desempenho / Dados e deploy |
+| Extra reviewers / joins / doesn't join | Revisores extras / entra / não entra |
+| Used | Usou |
 | Not checked | Não verificado |
 | Closing line | *A banca diminui o risco, mas não garante código sem bug. Antes de subir, faça um commit e confira as mudanças.* |

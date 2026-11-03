@@ -29,5 +29,11 @@ Hard evidence before opinions. Rules:
 | Broader static analysis | `semgrep scan --config auto` (downloads rules, so it needs network) |
 | Whitespace/conflict markers | `git diff --check` |
 | Tracked env files | `git ls-files | grep -i '\.env'` |
+| Structural search (duplicates, callers) | `ast-grep run -p '<pattern>' -l <lang>` (also `sg`) |
+| Shell scripts changed | `shellcheck <files>` |
+| Dockerfiles changed | `hadolint <Dockerfile>` |
+| CI workflows changed | `actionlint` |
+
+`uvx <tool>` and `docker run <image>` download things: ask before using them.
 
 Python on Windows may only be available as `py` or a full path; try `py -m pytest` / `py -m unittest` before calling it missing.
