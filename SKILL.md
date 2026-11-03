@@ -89,7 +89,11 @@ Otherwise **REJECTED**, with the main reason in one sentence. Findings tagged **
 
 ## Report
 
-Use the exact structure in [references/report-template.md](references/report-template.md). If the user asked for a file (e.g. `report.md`), write the report there and also show the verdict and fix list in the chat.
+Read [references/report-template.md](references/report-template.md) now, copy its skeleton and fill it in; don't write the report from memory. Before sending, check it against the template and fix what's off:
+- the title, then every section in the template's order and with its names (translated per the label table);
+- the fixes are one numbered list, not a table, each item one problem with `file:line`, **Case**, **Fix** and *found by*;
+- a panel-notes subsection for every reviewer that ran;
+- the closing line is the last thing in the reply: no offer to fix, question or sign-off after it (the user asks for fixes when they want them). If the user asked for a file (e.g. `report.md`), write the report there and also show the verdict and fix list in the chat.
 
 ## Step 4: Fix and review again (only when the user asks)
 

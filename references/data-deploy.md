@@ -18,7 +18,7 @@ You own data loss and broken deploys. Security exposure (also in Dockerfiles, CI
 
 ## If installed
 
-Use the skills named in your "Optional skills available" line; if that line says none or is missing, check your own list of available skills for the names below (they may carry a plugin prefix, e.g. `ponytail:ponytail-review`). Load each by reading its path, or by name with your skill tool. If you can do neither, skip it silently and don't mention it.
+Find the skills below yourself, whatever your "Optional skills available" line says: look in your own list of available skills (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`) and run one file search for `<name>/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, the repo's `.claude/skills` and `.agents/skills`, and `~/.claude/plugins/**/skills`. Load each by reading its path, or by name with your skill tool. If you can do neither, skip it silently and don't mention it.
 
 - **security-audit:** read `DATA-ISOLATION-AND-LIFECYCLE.md` (deletion, retention, restore, migrations) and `CLOUD-AND-DEPLOYMENT.md` from that skill's folder, and use only their non-security checks. Guidance mode only: never its full audit, never its output folder.
 

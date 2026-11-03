@@ -17,7 +17,7 @@ You are an attacker who just got the source. Find what you could steal, break in
 
 ## If installed
 
-Use the skills named in your "Optional skills available" line; if that line says none or is missing, check your own list of available skills for the names below (they may carry a plugin prefix, e.g. `ponytail:ponytail-review`). Load one by reading its path, or with your skill tool; if you can't, skip this section silently. Read-only: never write or edit files, install, download, or wait for a human. Your checklist above still runs. The panel's output format and severity table win over the skill's.
+Find the skills below yourself, whatever your "Optional skills available" line says: look in your own list of available skills (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`) and run one file search for `<name>/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, the repo's `.claude/skills` and `.agents/skills`, and `~/.claude/plugins/**/skills`. Load one by reading its path, or with your skill tool; if you can't, skip this section silently. Read-only: never write or edit files, install, download, or wait for a human. Your checklist above still runs. The panel's output format and severity table win over the skill's.
 
 **`security-audit`** — guidance mode only. Never start its full audit or create its output folder (`~/security-audit-skill`).
 - Read the companion files for the boundaries the scope touches:
