@@ -1,0 +1,16 @@
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1rem;
+  color: #222;
+}
+
+nav a {
+  margin-right: 1rem;
+}
+
+#posts time {
+  color: #666;
+  font-size: 0.9rem;
+}

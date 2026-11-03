@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: perf-orders-many-users
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  The panel reviews feature/order-list against main and runs the tests (they pass). Performance joins (new queries in a loop, a cache, per-process state) and takes the load from the README (~5,000 shops, 4 gunicorn workers). It flags the query per order in list_orders, the module-level cache that is never evicted or invalidated, and the in-memory rate limiter that each of the 4 workers keeps separately, rating at least one HIGH because the load is stated. It reads code only and sends no traffic. Verdict REJECTED with one ranked fix list. No existing file is changed. The answer is in English.

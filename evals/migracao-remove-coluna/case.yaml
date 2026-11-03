@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: migracao-remove-coluna
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  A banca revisa a branch feature/contatos contra main e roda os testes (passam). Dados e deploy entra (migração nova e config lida do ambiente); UI e acessibilidade não entra (nenhum arquivo de front-end). Aponta como CRITICO que 002_contatos.sql faz DROP COLUMN telefone sem copiar os telefones para contatos, e que config.py lê os.environ["SMTP_HOST"] sem padrão nem menção no README, derrubando o app no deploy. Veredito REPROVADO, com lista única por gravidade citando arquivo:linha. Nenhum arquivo existente é alterado. Resposta em português.

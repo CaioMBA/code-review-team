@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: ui-newsletter-form-branch
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  The panel reviews feature/newsletter against main. UI & accessibility joins (HTML/CSS/DOM code changed); Data & deploy does not (no migration, deploy or config files). It flags the email input with only a placeholder and no label, the icon-only submit button with no accessible name, the close "button" that is a div with onclick and can't be reached by keyboard, and the error shown only as a red border with no text. Verdict REJECTED with one ranked fix list. No existing file is changed. The answer is in English.

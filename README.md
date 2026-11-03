@@ -2,15 +2,18 @@
 
 *(formerly Banca de Revisão)*
 
-A skill for AI coding agents (OpenCode, Claude Code, and any agent that reads `SKILL.md`). It puts a **panel of 5 reviewers** on your code, and their job is to try to reject it before you ship. It's built for solo developers, who usually have no colleague to review their code and no CI to catch mistakes.
+A skill for AI coding agents (OpenCode, Claude Code, and any agent that reads `SKILL.md`). It puts a **review squad** on your code, and their job is to try to reject it before you ship. Four reviewers always run, three more join when your change touches their area, and they all work in parallel. It's built for solo developers, who usually have no colleague to review their code and no CI to catch mistakes.
 
-| Reviewer | Looks for |
-|---|---|
-| 🕵️ Hacker | secrets in code, leaked data, injection, missing auth, weak tokens, fake or risky dependencies |
-| 🤷 Confused user | empty fields, wrong types, double clicks, repeated actions, failing APIs, and the error the user actually sees |
-| 🧓 Senior engineer | code that duplicates what already exists, broken callers, changes outside the task, half-finished code |
-| 🧪 Tester | runs the tests, catches tests that can't fail, writes the missing ones |
-| 👔 Lead | checks every finding and gives **one** verdict: **APPROVED TO SHIP** or **REJECTED** |
+| Reviewer | Joins | Looks for |
+|---|---|---|
+| 🕵️ Hacker | always | secrets in code, leaked data, injection, missing auth, weak tokens, fake or risky dependencies |
+| 🤷 Confused user | always | empty fields, wrong types, double clicks, repeated actions, failing APIs, and the error the user actually sees |
+| 🧓 Senior engineer | always | code that duplicates what already exists, broken callers, changes outside the task, half-finished code |
+| 🧪 Tester | always | runs the tests, catches tests that can't fail, writes the missing ones |
+| ♿ UI & accessibility | front-end files change | flows keyboard or screen-reader users can't finish, missing labels, contrast, phone layouts |
+| 📈 Performance | many users, or the change adds queries, loops over data, caches, jobs or API calls | what breaks at scale, from reading the code (it never sends traffic) |
+| 🗄️ Data & deploy | migrations, Docker, CI or config change | migrations that lose data, deploys that crash, settings with no default |
+| 👔 Lead | always | checks every finding and gives **one** verdict: **APPROVED TO SHIP** or **REJECTED** |
 
 **What you get:**
 
@@ -48,14 +51,31 @@ Just ask in your own words:
 
 By default it reviews everything that would ship: uncommitted changes plus your branch compared with the main branch. It also works on files you name or code you paste into the chat. To review only the new lines, say so.
 
+## Works better with (optional)
+
+The squad is complete on its own. If any of these skills are installed next to it, the matching reviewer uses them, read-only, and the report keeps the same format. None is required, and a missing one is never reported.
+
+| Skill | Used by | Adds |
+|---|---|---|
+| [security-audit](https://github.com/cloudflare/security-audit-skill) | Hacker, Performance, Data & deploy | deeper attack-class checks, loaded only for what your change touches (guidance mode, never a full audit) |
+| [ponytail](https://github.com/DietrichGebert/ponytail) (`ponytail-review`, `ponytail-debt`) | Senior | lean checks (delete, reuse, stdlib, yagni) and `shortcut:` markers whose limit you've outgrown |
+| playwright-cli | Confused user, UI | drives the changed flow in a real browser, if the app starts locally with no setup |
+| ui-ux-pro-max, impeccable, review-animations, mobile-native | UI | accessibility and UX rules, motion and mobile-web checks |
+| superpowers (`receiving-code-review`, `systematic-debugging`, `verification-before-completion`) | fix loop | checks each finding before fixing, debugs failing fixes, verifies before claiming round 2 |
+| a `memory` tool (e.g. opencode-mem) | Lead | remembers your answers to hotspots and shows them next time |
+| `ast-grep` | Senior | structural search for duplicates and callers |
+
 ## Layout
 
 ```
-SKILL.md                      the coordinator: scope, tool pass, panel, gate, report, fix loop
+SKILL.md                      the coordinator: scope, roles that join, tool pass, panel, gate, report, fix loop
 references/hacker.md          one checklist per reviewer, each loaded only by that reviewer
 references/confused-user.md
 references/senior.md
 references/tester.md
+references/ui.md              joins on front-end changes
+references/performance.md     joins on many users or queries/loops/caches/jobs/API calls
+references/data-deploy.md     joins on migrations, Docker, CI, config
 references/tools.md           lint/type/test/audit commands for each stack
 references/report-template.md report structure and label translations
 evals/                        test cases with planted bugs (claude plugin eval format)

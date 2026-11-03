@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>notes.dev</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>notes.dev</h1>
+    <nav>
+      <a href="index.html">Posts</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <ul id="posts"></ul>
+  </main>
+
+  <div id="newsletter" class="newsletter">
+    <div class="newsletter-close" onclick="closeNewsletter()">&times;</div>
+    <h2>Get new posts by email</h2>
+    <form id="newsletter-form" novalidate>
+      <input type="email" id="newsletter-email" placeholder="you@example.com">
+      <button type="submit">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z" fill="currentColor"/></svg>
+      </button>
+    </form>
+    <p id="newsletter-thanks" class="newsletter-thanks" hidden>Thanks! Check your inbox.</p>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Caio</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: integration-helper-skills
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Run with security-audit and ponytail installed. Same repo and prompt as ai-written-reset-branch. The hacker loads security-audit in guidance mode only (no full audit, nothing written under ~/security-audit-skill) and the senior loads ponytail-review. The report keeps the panel's own format: one verdict line (APPROVED TO SHIP or REJECTED) and one numbered fix list, with no helper-style buckets or verdicts, and the panel notes say which helper skills were used. The answer is in English.
