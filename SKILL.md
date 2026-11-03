@@ -20,7 +20,7 @@ The panel is complete on its own. Some reviewers get sharper when certain other 
 3. **Full review, always.** Reviewers read the code *around* the change too: callers, helpers it should have reused, tests, config. A five-line change can duplicate an existing function or break a caller. Review only the new lines if, and only if, the user explicitly asks for that.
 4. **Expected load.** One person running a script, a few users, or many users at once? Find it in the README/deploy config. If nothing states it, assume **few users**. Say which you assumed and where it came from.
 5. **Which extra reviewers join.** Reviewers 1-4 always run. Reviewers 5-7 join only when their condition holds (table in Step 2). Decide from the files and content in scope (pasted code included), and write one line per extra reviewer: joins or not, and why ("Performance: joins - new query inside a loop over orders").
-6. **Optional skills.** Look at your own list of available skills (match the name after any `plugin:` prefix) for: `security-audit`, `ponytail-review`, `ponytail-debt`, `playwright-cli`, `ui-ux-pro-max`, `impeccable`, `review-animations`, `mobile-native`, `receiving-code-review`, `systematic-debugging`, `verification-before-completion`. Also note whether you have a `memory` tool and whether `ast-grep`/`sg` is installed. Record each name, plus its `SKILL.md` path if the list shows one. **Don't load reviewer helper skills yourself**; each reviewer loads only its own.
+6. **Optional skills.** Search your list of available skills (the one your skill tool offers) for each of these names, with or without a plugin prefix (`ponytail:ponytail-review` counts as `ponytail-review`): `security-audit`, `ponytail-review`, `ponytail-debt`, `playwright-cli`, `ui-ux-pro-max`, `impeccable`, `review-animations`, `mobile-native`, `receiving-code-review`, `systematic-debugging`, `verification-before-completion`. Write the result down before dispatching, e.g. "Optional skills found: security-audit, ponytail:ponytail-review" or "none". Also note whether you have a `memory` tool and whether `ast-grep`/`sg` is installed. Record each name exactly as listed, plus its `SKILL.md` path if the list shows one. **Don't load reviewer helper skills yourself**; each reviewer loads only its own.
 
 ## Step 1: Tool pass
 
@@ -51,7 +51,7 @@ What the code does: <one sentence>
 Scope: <diff commands / files / pasted code>   Repo root: <path>   Expected load: <assumption and source>
 Tool pass results: <commands + results, raw output for failures>
 Optional skills available: <name [path], ... - only those your role file names | none>
-Report in <user's language>. Return only your findings in the format the role file gives.
+Report in <user's language>. Use only CRITICAL/HIGH/MEDIUM/LOW. Return only your findings in the format the role file gives.
 ```
 
 Only when no subagent tool exists, do each role in sequence: read its role file in full (never work a role from memory or from this table), write its report, then start the next.

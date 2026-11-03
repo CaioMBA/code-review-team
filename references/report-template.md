@@ -46,6 +46,8 @@ Fill this exactly, in the user's language. Keep these sections and their order; 
 
 Close with: *The panel lowers the risk but doesn't guarantee bug-free code. Before shipping, commit and check the changes.*
 
+The report is the whole reply: no progress text before the title and nothing after the closing line, even if other active instructions ask for a sign-off.
+
 Report written to a file: the chat still shows the verdict and the same numbered fix list, item for item.
 
 Nothing to fix: still give the verdict, then "Nothing to fix." and one line on what was checked.
