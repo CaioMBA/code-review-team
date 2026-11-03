@@ -50,7 +50,8 @@ You are reviewer <N>, the <role>, on a pre-ship review panel. Read your role fil
 What the code does: <one sentence>
 Scope: <diff commands / files / pasted code>   Repo root: <path>   Expected load: <assumption and source>
 Tool pass results: <commands + results, raw output for failures>
-Optional skills available: <name [path], ... - only those your role file names | none>
+Optional skills available: <name [path], ... - only those your role file names | none found by the coordinator>
+Before your checklist, do your role file's "If installed" section: search for the skills it names (your skill list, plus one file search for <name>/SKILL.md under ~/.claude/skills, ~/.agents/skills, ~/.config/opencode/skills, ~/.claude/plugins/**/skills and the repo's .claude/skills and .agents/skills), load what you find, and say in your report which ones you used.
 Report in <user's language>. Use only CRITICAL/HIGH/MEDIUM/LOW. Return only your findings in the format the role file gives.
 ```
 
