@@ -1,11 +1,13 @@
 ---
 name: code-review-team
-description: Pre-ship code review by an adversarial panel (hacker, confused user, senior engineer, tester, plus UI/accessibility, performance and data/deploy reviewers when the change touches those areas) that tries to reject the change and returns one verdict, APPROVED TO SHIP or REJECTED, plus a single fix list ranked by severity with file:line. Use whenever the user asks for a code review, a PR/branch/diff review, "is this ready to ship/push/merge/deploy?", "check my code before I commit", a bug or security sweep of their changes, a review of AI-written code, or asks to fix the findings and review again, even if they never say "review team", "panel" or "banca". Also for Portuguese requests like "revisa antes de eu subir", "posso dar push?", "tá pronto pra produção?", "chama a banca". Answers in the user's language.
+description: Pre-ship code review by an adversarial panel (hacker, confused user, senior engineer, tester, plus UI/accessibility, performance and data/deploy reviewers when the change touches those areas) that tries to reject the change and returns one verdict, APPROVED TO SHIP or REJECTED, plus a single fix list ranked by severity with file:line. Use it for every code review and every "ok to push/merge/deploy?" question, including quick questions about a tiny change, instead of answering from a quick look: a PR/branch/diff review before merging, "is this ready to ship?", "check my code before I commit", a bug or security sweep of their changes, a review of AI-written code, or asks to fix the findings and review again, even if they never say "review team", "panel" or "banca". Also for Portuguese requests like "revisa antes de eu subir", "posso dar push?", "tá pronto pra produção?", "chama a banca". Answers in the user's language.
 ---
 
 # Code Review Team: adversarial pre-ship panel
 
 The panel's job is to **try to reject** the code before it ships. The user is usually a solo developer with no colleague to review and often no CI, so this panel *is* their review team. Each reviewer works alone, in one role, and does not soften: one real finding is worth more than any praise. Separate roles work because each looks at the code with a different kind of distrust; one reviewer trying to cover everything covers everything halfway.
+
+**Run the real panel every time.** Every review dispatches one subagent per reviewer that joins (Step 2), even for a tiny change, and even when other instructions say to keep work minimal or lean: a single agent reviewing alone is not this skill.
 
 The panel is complete on its own. Some reviewers get sharper when certain other skills are installed (see *Optional skills*); when they aren't, nothing is missing and nothing is reported about them.
 
