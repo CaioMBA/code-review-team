@@ -1,6 +1,6 @@
 # Report template
 
-Fill this exactly, in the user's language. Skip a section only where noted. Number fixes across the whole list so the user can say "fix 1 and 3".
+Fill this exactly, in the user's language. Keep these sections and their order; don't rename, merge or drop them, and skip one only where noted. Number fixes across the whole list so the user can say "fix 1 and 3". Every fix is one problem with its own `file:line` (for a problem with a whole file, cite the first line it concerns); never bundle several small problems into one item.
 
 ```markdown
 # Review panel: <project or branch>
@@ -15,7 +15,7 @@ Fill this exactly, in the user's language. Skip a section only where noted. Numb
 1. [CRITICAL] `path/file.ext:42` <problem in one line>
    - **Case:** <input or situation → wrong result>
    - **Fix:** <smallest fix, or a short diff>
-   (found by: hacker, tester)
+   (found by: hacker, tester - name each reviewer)
 2. [HIGH] ...
 
 ## Confirm before shipping
@@ -29,6 +29,7 @@ Fill this exactly, in the user's language. Skip a section only where noted. Numb
 | Command | Result |
 |---|---|
 | `npm test` | 2 failed: `cart.test.js` "applies coupon once" |
+<only Step 1 commands; scripts and tests the reviewers wrote go in their panel notes>
 
 ## Panel notes
 ### 1. Hacker
@@ -44,6 +45,8 @@ Fill this exactly, in the user's language. Skip a section only where noted. Numb
 ```
 
 Close with: *The panel lowers the risk but doesn't guarantee bug-free code. Before shipping, commit and check the changes.*
+
+Report written to a file: the chat still shows the verdict and the same numbered fix list, item for item.
 
 Nothing to fix: still give the verdict, then "Nothing to fix." and one line on what was checked.
 
@@ -61,7 +64,7 @@ Use the user's language. Portuguese labels are fixed; for other languages, trans
 | APPROVED TO SHIP | APROVADO PRA SUBIR |
 | REJECTED | REPROVADO |
 | What to fix (most severe first) | O que corrigir (do mais grave ao menos grave) |
-| CRITICAL / HIGH / MEDIUM / LOW | CRITICO / ALTO / MÉDIO / BAIXO |
+| CRITICAL / HIGH / MEDIUM / LOW | CRÍTICO / ALTO / MÉDIO / BAIXO |
 | Case / Fix / found by | Caso / Correção / achado por |
 | Confirm before shipping | Confirme antes de subir |
 | Older problems (not blocking) | Problemas antigos (não bloqueiam) |

@@ -75,9 +75,10 @@ Read the reports of every reviewer that joined and:
 
 1. **Merge duplicates** across reviewers and credit everyone who found it.
 2. **Re-check each finding** against the code: the line exists, the value can really be empty, the caller is real. Drop what you can't confirm. A `shortcut:` comment that names its limit is a decision, not a finding, unless the expected load crosses it.
-3. **Fix severities** that are inflated or understated.
-4. **Hotspot memory** (only if you have a `memory` tool): search it for an earlier answer to each hotspot (same file, same question). Still list the hotspot, marked "previously answered: <answer>, <date>", so the user can see if things changed. Save an answer only when the user gives one in the chat. Never drop a hotspot because of memory.
-5. **Apply the gate** and give **one** verdict:
+3. **Fix severities** that are inflated or understated, using the severity table. Lower a reviewer's severity only for a reason that holds for every affected user: a flow a keyboard or screen-reader user can't finish stays HIGH even if a mouse user gets through.
+4. **Clean up after the panel.** Delete caches the panel's runs created (`__pycache__`, `.pytest_cache`, `node_modules/.cache`) if they weren't there before, and list every new file the tester created so the user can keep or delete it.
+5. **Hotspot memory** (only if you have a `memory` tool): search it for an earlier answer to each hotspot (same file, same question). Still list the hotspot, marked "previously answered: <answer>, <date>", so the user can see if things changed. Save an answer only when the user gives one in the chat. Never drop a hotspot because of memory.
+6. **Apply the gate** and give **one** verdict:
 
 **APPROVED TO SHIP** only if all of these hold:
 - no CRITICAL or HIGH finding tagged **new**;
@@ -94,9 +95,10 @@ Use the exact structure in [references/report-template.md](references/report-tem
 
 When the user asks to fix ("fix it", "go ahead", "corrige", "fix 1 and 3"):
 
-1. If there are uncommitted changes, suggest a commit first so the fixes are easy to check and undo.
-2. Fix the requested items (all of them by default), **most severe first, one at a time**, running the relevant tests after each.
-3. Re-run the **whole** panel (Steps 0-3) on the fixed code, not just the fixed items: fixes create bugs too.
-4. Give the new verdict and a short **round 1 → round 2** comparison: what was fixed, what is still open, anything new.
+1. **Show round 1 first.** If the user asked to review and fix in one go, still write the full round 1 report (verdict and fix list) before changing any file.
+2. If there are uncommitted changes, suggest a commit first so the fixes are easy to check and undo.
+3. Fix the requested items (all of them by default), **most severe first, one at a time**, running the relevant tests after each. Fix only what the finding describes: no new behavior, formats or refactors. If a fix needs a behavior change the user didn't ask for, leave it open and say why.
+4. Re-run the **whole** panel (Steps 0-3) on the fixed code, not just the fixed items: fixes create bugs too. The gate uses the **full** test suite, the tester's new test files included. A red test is never excluded or relabeled: either the code or the test is wrong, and that gets fixed or reported as an open HIGH.
+5. Give the new verdict and a short **round 1 → round 2** comparison: what was fixed, what is still open, anything new. Round 2 uses the same report template as round 1.
 
 If these skills are available, use them in this loop: `receiving-code-review` before each fix (is the finding still right?), `systematic-debugging` when a fix's tests fail, `verification-before-completion` before stating the round 2 result. The panel's rules win over theirs: don't stop the loop to ask. A finding that turns out wrong is skipped with the reason; a fix that still fails after one debugging pass stays open and goes in the round comparison.
