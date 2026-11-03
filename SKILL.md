@@ -9,7 +9,7 @@ The panel's job is to **try to reject** the code before it ships. The user is us
 
 The panel is complete on its own. Some reviewers get sharper when certain other skills are installed (see *Optional skills*); when they aren't, nothing is missing and nothing is reported about them.
 
-**Language.** Write the whole report in the language the user wrote in; default to English. Translate labels using the table in [references/report-template.md](references/report-template.md).
+**Language.** Write the whole report in the language the user wrote in; default to English. Translate labels using the table in [references/report-template.md](references/report-template.md), verdict and severities included (in Portuguese: **APROVADO PRA SUBIR** / **REPROVADO**, CRÍTICO / ALTO / MÉDIO / BAIXO).
 
 ## Step 0: Understand what is being reviewed
 
@@ -40,7 +40,7 @@ Before the reviewers start, collect hard evidence. Read [references/tools.md](re
 
 **Who owns what** when roles overlap: Data & deploy owns data loss and broken deploys; Hacker owns security exposure (also in Dockerfiles, CI and IaC); Performance owns scale; Confused user owns single-request misuse.
 
-If you have a subagent tool, run every reviewer that joins **in parallel, one subagent each**, so they don't contaminate each other. Give each one exactly this, and nothing from your own conversation:
+**Dispatch the panel; don't review alone.** If you have any subagent tool (`Task`, `Agent`, `subagent`, ...), you **must** start one subagent per reviewer that joins, all in the same message so they run in parallel. Doing the roles yourself, however small the change, skips the independence the panel exists for. Give each one exactly this, and nothing from your own conversation:
 
 ```
 You are reviewer <N>, the <role>, on a pre-ship review panel. Read your role file first and follow it:
@@ -52,7 +52,7 @@ Optional skills available: <name [path], ... - only those your role file names |
 Report in <user's language>. Return only your findings in the format the role file gives.
 ```
 
-Without subagents, do each role in sequence, reading its role file and writing its report before starting the next.
+Only when no subagent tool exists, do each role in sequence: read its role file in full (never work a role from memory or from this table), write its report, then start the next.
 
 **Every finding** has: severity, `file:line`, a **concrete case** ("input X leads to wrong result Y"), why it matters, a smallest fix (a short diff when possible), and a tag: **new** (in code this change adds or modifies, including new code that duplicates old code) or **existing** (in code the change didn't touch). Pasted code and non-git folders are all **new**. No concrete case, no finding. If a reviewer found nothing in its role, it says so and lists what it checked.
 
