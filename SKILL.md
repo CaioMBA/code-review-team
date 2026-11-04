@@ -1,6 +1,6 @@
 ---
 name: code-review-team
-description: Pre-ship code review by an adversarial panel (hacker, confused user, senior engineer, tester, plus UI, performance and data/deploy reviewers when relevant) that returns one verdict, APPROVED TO SHIP or REJECTED, and one fix list ranked by severity with file:line. Use for every code review and every "ok to push/merge/deploy?" question, even about a tiny change, instead of answering from a quick look: PR/branch/diff reviews, "check my code before I commit", bug or security sweeps, AI-written code, or "fix it and review again". Also Portuguese: "revisa antes de eu subir", "posso dar push?", "tá pronto pra produção?", "chama a banca". Answers in the user's language.
+description: Pre-ship code review by an adversarial panel (hacker, confused user, senior engineer, tester, plus UI, performance and data/deploy reviewers when relevant) that returns one verdict, APPROVED TO SHIP or REJECTED, and one fix list ranked by severity with file:line. Use for every code review and every "ok to push/merge/deploy?" question, even about a tiny change, instead of answering from a quick look. Covers PR/branch/diff reviews, "check my code before I commit", bug or security sweeps, AI-written code, and "fix it and review again". Also Portuguese requests like "revisa antes de eu subir", "posso dar push?", "tá pronto pra produção?", "chama a banca". Answers in the user's language.
 ---
 
 # Code Review Team: adversarial pre-ship panel
