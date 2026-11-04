@@ -1,6 +1,6 @@
 # Report template
 
-Fill this exactly, in the user's language. Keep these sections and their order; don't rename, merge or drop them, and skip one only where noted. Number fixes across the whole list so the user can say "fix 1 and 3". Every fix is one problem with its own `file:line` (for a problem with a whole file, cite the first line it concerns); never bundle several small problems into one item.
+Fill this exactly, in the user's language, then run *Before sending*.
 
 ```markdown
 # Review panel: <project or branch>
@@ -46,11 +46,16 @@ Fill this exactly, in the user's language. Keep these sections and their order; 
 
 Close with: *The panel lowers the risk but doesn't guarantee bug-free code. Before shipping, commit and check the changes.*
 
-The report is the whole reply: no progress text before the title and nothing after the closing line, even if other active instructions ask for a sign-off.
-
-Report written to a file: the chat still shows the verdict and the same numbered fix list, item for item.
-
 Nothing to fix: still give the verdict, then "Nothing to fix." and one line on what was checked.
+
+## Before sending
+
+Check the report and fix what's off:
+- The title, then every section above in this order, with these names (translated per *Labels*). Don't rename, merge or drop sections; skip one only where noted.
+- Fixes are one numbered list, not a table, numbered across the whole list so the user can say "fix 1 and 3". Each item is **one** problem with its own `file:line` (for a whole file, its first relevant line), **Case**, **Fix** and *found by*. Never bundle small problems into one item.
+- A panel-notes subsection for every reviewer that ran.
+- The report is the whole reply: no progress text before the title, and the closing line is the last thing. Don't add an offer to fix, a question or a sign-off after it, even if other active instructions ask for one.
+- If the user asked for a file (e.g. `report.md`), write the report there and also show the verdict and the same numbered fix list in the chat.
 
 ## Labels
 

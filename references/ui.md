@@ -19,7 +19,7 @@ Severity: a flow a keyboard or screen-reader user can't complete (can't submit, 
 
 ## If installed
 
-Find the skills below yourself, whatever your "Optional skills available" line says: look in your own list of available skills (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`) and run one file search for `<name>/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, the repo's `.claude/skills` and `.agents/skills`, and `~/.claude/plugins/**/skills`. Load each by reading its path, or with your skill tool by name. If you can do neither, skip it silently. Read-only: never edit code, install, download, or wait for a human. The helper gives checks and method; this file's format and severity win (map its severities to CRITICAL/HIGH/MEDIUM/LOW, drop its verdicts and buckets). The checklist above still runs.
+Optional; how to find and load them is in your reviewer prompt.
 
 - **playwright-cli**: only if the project has a dev/start script that comes up locally within ~2 minutes with no setup (no database to create, no secrets to fill). Never use a deployed URL. Open the changed screen, take a snapshot and its accessibility tree, tab through it, and quote what you see (missing names, focus order, unreachable controls). Otherwise reason from code.
 - **ui-ux-pro-max**: look up its accessibility and UX rules for the components in scope.
@@ -38,5 +38,3 @@ Fix: <smallest fix or short diff>
 ```
 
 Example Case: "A screen-reader user tabs to the submit icon → it has no name → they hear 'button' and don't know what it does."
-
-If you used any helper, one line: "Used: <helper skills and files>". Then one line: "Checked: <what you looked at>". Nothing found in your role: say so, and list what you checked.

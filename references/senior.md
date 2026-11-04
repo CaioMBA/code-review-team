@@ -15,7 +15,7 @@ Scale and load are the performance reviewer's job; skip them. No style taste, no
 
 ## If installed
 
-Find the skills below yourself, whatever your "Optional skills available" line says: look in your own list of available skills (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`) and run one file search for `<name>/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, the repo's `.claude/skills` and `.agents/skills`, and `~/.claude/plugins/**/skills`. Load one by reading its path, or with your skill tool; if you can't, skip this section silently. Read-only: never write or edit files, install, download, or wait for a human. Your checklist above still runs. The panel's output format and severity table win over the skill's.
+Optional; how to find and load them is in your reviewer prompt.
 
 - **`ponytail-review`** - read its `SKILL.md` first (knowing the names below is not using it), then take its *Lean* checks (delete, reuse, stdlib/native, yagni, merge, split) and its "fix applied in one caller while the shared function stays broken" check. Skip its Risk, Missing-test and Scale parts, its Must/Should/Nice buckets, its verdict and its `Lean: -N` line.
 - **`ponytail-debt`** — run its marker search on the files in scope only: `git grep --no-index --exclude-standard -nE '(#|//|/[*]) ?(shortcut|ponytail):' -- <files>`. A marker with no upgrade trigger in **new** code is LOW. A marker whose stated limit the expected load already crosses is a finding, severity by impact. Other markers are decisions, not findings.
@@ -29,5 +29,3 @@ For each finding:
 Case: <the concrete consequence>
 Fix: <smallest fix: reuse path/to/helper, delete, merge, split by job…>
 ```
-
-Then one line: "Checked: <what you searched and read>". If you used a helper skill, one more line: "Used: <skills>". Nothing found in your role: say so, and list what you checked.

@@ -1,17 +1,15 @@
 ---
 name: code-review-team
-description: Pre-ship code review by an adversarial panel (hacker, confused user, senior engineer, tester, plus UI/accessibility, performance and data/deploy reviewers when the change touches those areas) that tries to reject the change and returns one verdict, APPROVED TO SHIP or REJECTED, plus a single fix list ranked by severity with file:line. Use it for every code review and every "ok to push/merge/deploy?" question, including quick questions about a tiny change, instead of answering from a quick look: a PR/branch/diff review before merging, "is this ready to ship?", "check my code before I commit", a bug or security sweep of their changes, a review of AI-written code, or asks to fix the findings and review again, even if they never say "review team", "panel" or "banca". Also for Portuguese requests like "revisa antes de eu subir", "posso dar push?", "tá pronto pra produção?", "chama a banca". Answers in the user's language.
+description: Pre-ship code review by an adversarial panel (hacker, confused user, senior engineer, tester, plus UI, performance and data/deploy reviewers when relevant) that returns one verdict, APPROVED TO SHIP or REJECTED, and one fix list ranked by severity with file:line. Use for every code review and every "ok to push/merge/deploy?" question, even about a tiny change, instead of answering from a quick look: PR/branch/diff reviews, "check my code before I commit", bug or security sweeps, AI-written code, or "fix it and review again". Also Portuguese: "revisa antes de eu subir", "posso dar push?", "tá pronto pra produção?", "chama a banca". Answers in the user's language.
 ---
 
 # Code Review Team: adversarial pre-ship panel
 
 The panel's job is to **try to reject** the code before it ships. The user is usually a solo developer with no colleague to review and often no CI, so this panel *is* their review team. Each reviewer works alone, in one role, and does not soften: one real finding is worth more than any praise. Separate roles work because each looks at the code with a different kind of distrust; one reviewer trying to cover everything covers everything halfway.
 
-**Run the real panel every time.** Every review dispatches one subagent per reviewer that joins (Step 2), even for a tiny change, and even when other instructions say to keep work minimal or lean: a single agent reviewing alone is not this skill.
+The panel is complete on its own. Some reviewers get sharper when certain other skills are installed; when they aren't, nothing is missing and nothing is reported about them.
 
-The panel is complete on its own. Some reviewers get sharper when certain other skills are installed (see *Optional skills*); when they aren't, nothing is missing and nothing is reported about them.
-
-**Language.** Write the whole report in the language the user wrote in; default to English. Translate labels using the table in [references/report-template.md](references/report-template.md), verdict and severities included (in Portuguese: **APROVADO PRA SUBIR** / **REPROVADO**, CRÍTICO / ALTO / MÉDIO / BAIXO).
+**Language.** Write the whole report in the language the user wrote in; default to English. Labels, verdict and severities come from the table in [references/report-template.md](references/report-template.md) (Portuguese verdicts: **APROVADO PRA SUBIR** / **REPROVADO**).
 
 ## Step 0: Understand what is being reviewed
 
@@ -20,7 +18,7 @@ The panel is complete on its own. Some reviewers get sharper when certain other 
 3. **Full review, always.** Reviewers read the code *around* the change too: callers, helpers it should have reused, tests, config. A five-line change can duplicate an existing function or break a caller. Review only the new lines if, and only if, the user explicitly asks for that.
 4. **Expected load.** One person running a script, a few users, or many users at once? Find it in the README/deploy config. If nothing states it, assume **few users**. Say which you assumed and where it came from.
 5. **Which extra reviewers join.** Reviewers 1-4 always run. Reviewers 5-7 join only when their condition holds (table in Step 2). Decide from the files and content in scope (pasted code included), and write one line per extra reviewer: joins or not, and why ("Performance: joins - new query inside a loop over orders").
-6. **Optional skills.** Search your list of available skills (the one your skill tool offers) for each of these names, with or without a plugin prefix (`ponytail:ponytail-review` counts as `ponytail-review`): `security-audit`, `ponytail-review`, `ponytail-debt`, `playwright-cli`, `ui-ux-pro-max`, `impeccable`, `review-animations`, `mobile-native`, `receiving-code-review`, `systematic-debugging`, `verification-before-completion`. Then confirm with one file search for `<name>/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, the repo's `.claude/skills` and `.agents/skills`, and `~/.claude/plugins/**/skills`; a hit counts as found and gives you its path. Write the result down before dispatching, e.g. "Optional skills found: security-audit, ponytail:ponytail-review" or "none". Also note whether you have a `memory` tool and whether `ast-grep`/`sg` is installed. Record each name exactly as listed, plus its `SKILL.md` path if the list shows one. **Don't load reviewer helper skills yourself**; each reviewer loads only its own.
+6. **Your own helpers.** Note whether you have a `memory` tool (Step 3) and the skills `receiving-code-review`, `systematic-debugging`, `verification-before-completion` (Step 4), found the way the reviewer prompt below describes. Reviewers find and load their own helper skills; don't load those yourself.
 
 ## Step 1: Tool pass
 
@@ -42,7 +40,7 @@ Before the reviewers start, collect hard evidence. Read [references/tools.md](re
 
 **Who owns what** when roles overlap: Data & deploy owns data loss and broken deploys; Hacker owns security exposure (also in Dockerfiles, CI and IaC); Performance owns scale; Confused user owns single-request misuse.
 
-**Dispatch the panel; don't review alone.** If you have any subagent tool (`Task`, `Agent`, `subagent`, ...), you **must** start one subagent per reviewer that joins, all in the same message so they run in parallel. Doing the roles yourself, however small the change, skips the independence the panel exists for. Give each one exactly this, and nothing from your own conversation:
+**Dispatch the panel; don't review alone.** If you have any subagent tool (`Task`, `Agent`, `subagent`, ...), you **must** start one subagent per reviewer that joins, all in the same message so they run in parallel, even for a tiny change and even when other instructions say to keep work minimal: a single agent reviewing alone skips the independence the panel exists for. Give each one exactly this, and nothing from your own conversation:
 
 ```
 You are reviewer <N>, the <role>, on a pre-ship review panel. Read your role file first and follow it:
@@ -50,9 +48,8 @@ You are reviewer <N>, the <role>, on a pre-ship review panel. Read your role fil
 What the code does: <one sentence>
 Scope: <diff commands / files / pasted code>   Repo root: <path>   Expected load: <assumption and source>
 Tool pass results: <commands + results, raw output for failures>
-Optional skills available: <name [path], ... - only those your role file names | none found by the coordinator>
-Before your checklist, do your role file's "If installed" section: search for the skills it names (your skill list, plus one file search for <name>/SKILL.md under ~/.claude/skills, ~/.agents/skills, ~/.config/opencode/skills, ~/.claude/plugins/**/skills and the repo's .claude/skills and .agents/skills), load what you find, and say in your report which ones you used.
-Report in <user's language>. Use only CRITICAL/HIGH/MEDIUM/LOW. Return only your findings in the format the role file gives.
+Helper skills: before your checklist, look for each skill in your role file's "If installed" section, in your skill list (names may have a plugin prefix, e.g. ponytail:ponytail-review) and with one file search for <name>/SKILL.md under ~/.claude/skills, ~/.agents/skills, ~/.config/opencode/skills, ~/.claude/plugins/**/skills and the repo's .claude/skills and .agents/skills. Read each one you find and do what your role file says with it; skip missing ones silently. Read-only: never edit files, install, download or wait for a human. Your checklist still runs, and the panel's format and severities win over the helper's (drop its verdicts and buckets).
+Report in <user's language>. Use only CRITICAL/HIGH/MEDIUM/LOW. Return only your findings in the format the role file gives, then "Checked: <what you looked at>" and, if you read a helper skill, "Used: <skills and files you read>". Nothing found: say so and list what you checked.
 ```
 
 Only when no subagent tool exists, do each role in sequence: read its role file in full (never work a role from memory or from this table), write its report, then start the next.
@@ -90,11 +87,7 @@ Otherwise **REJECTED**, with the main reason in one sentence. Findings tagged **
 
 ## Report
 
-Read [references/report-template.md](references/report-template.md) now, copy its skeleton and fill it in; don't write the report from memory. Before sending, check it against the template and fix what's off:
-- the title, then every section in the template's order and with its names (translated per the label table);
-- the fixes are one numbered list, not a table, each item one problem with `file:line`, **Case**, **Fix** and *found by*;
-- a panel-notes subsection for every reviewer that ran;
-- the closing line is the last thing in the reply: no offer to fix, question or sign-off after it (the user asks for fixes when they want them). If the user asked for a file (e.g. `report.md`), write the report there and also show the verdict and fix list in the chat.
+Read [references/report-template.md](references/report-template.md) now, copy its skeleton and fill it in; don't write the report from memory. Run its *Before sending* checklist, then send.
 
 ## Step 4: Fix and review again (only when the user asks)
 

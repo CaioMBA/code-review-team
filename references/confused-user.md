@@ -19,7 +19,7 @@ Focus on the flows this change touches, then any flow it could affect.
 
 ## If installed
 
-Find the skills below yourself, whatever your "Optional skills available" line says: look in your own list of available skills (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`) and run one file search for `<name>/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, the repo's `.claude/skills` and `.agents/skills`, and `~/.claude/plugins/**/skills`. Load one by reading its path, or with your skill tool; if you can't, skip this section silently. Read-only: never write or edit files, install, download, or wait for a human. Your cases above still run. The panel's output format and severity table win over the skill's.
+Optional; how to find and load them is in your reviewer prompt.
 
 **`playwright-cli`** — only when the project's dev/start script comes up locally within ~2 minutes with no setup (no database to create, no secrets to fill). Never point it at a deployed URL. Drive the changed flow in the browser and quote what the user sees. Close the browser and stop the server when done. Otherwise reason from the code, as above.
 
@@ -33,5 +33,3 @@ Case: <what the user does> → <what happens> → <what they see>
 Ran: <command and output> | Not run: <why>
 Fix: <smallest fix: validation, a clear message, disable the button, idempotency…>
 ```
-
-Then one line: "Checked: <cases tried>". If you used a helper skill, one more line: "Used: <skills>". Nothing found in your role: say so, and list what you tried.

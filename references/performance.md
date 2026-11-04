@@ -28,7 +28,7 @@ Don't flag what can't break at the given load or at a size the domain makes plau
 
 ## If installed
 
-Find the skills below yourself, whatever your "Optional skills available" line says: look in your own list of available skills (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`) and run one file search for `<name>/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, the repo's `.claude/skills` and `.agents/skills`, and `~/.claude/plugins/**/skills`. Load each by reading its path, or by name with your skill tool. If you can't, skip it silently. Use them read-only. The panel's output format and severity rules always win; drop their verdicts, buckets and severity names. Your checklist above still runs.
+Optional; how to find and load them is in your reviewer prompt.
 
 - **ponytail-review**: read only its Scale section and use it as extra checks. Ignore its buckets, verdict and other sections.
 - **security-audit**: when user input controls the amount of work (sizes, counts, uploads, regex, page sizes, fan-out), read `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` from that skill's folder as guidance. Never start its full audit or create its output folder.
@@ -43,5 +43,3 @@ Case: <what happens, concretely>
 Breaks at: <load, and why>
 Fix: <smallest fix or short diff>
 ```
-
-If you used a helper skill, one line: "Used: <skill> (<files or sections>)". Then one line: "Checked: <what you looked at>". Nothing found in your role: say so, and list what you checked.
