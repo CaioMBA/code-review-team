@@ -74,7 +74,7 @@ A **hotspot** is a question for the user, not a finding, and only for *security*
 
 Read the reports of every reviewer that joined and:
 
-1. **Merge duplicates** across reviewers and credit everyone who found it.
+1. **Merge duplicates** across reviewers and credit everyone who found it. Merge only reports of the *same* problem; different problems stay separate items even on the same line, and one root cause gets one item, not several that point at each other.
 2. **Re-check each finding** against the code: the line exists, the value can really be empty, the caller is real. Drop what you can't confirm. A `shortcut:` comment that names its limit is a decision, not a finding, unless the expected load crosses it.
 3. **Fix severities** that are inflated or understated, using the severity table. Lower a reviewer's severity only for a reason that holds for every affected user: a flow a keyboard or screen-reader user can't finish stays HIGH even if a mouse user gets through.
 4. **Clean up after the panel.** Delete caches the panel's runs created (`__pycache__`, `.pytest_cache`, `node_modules/.cache`) if they weren't there before, and list every new file the tester created so the user can keep or delete it.
