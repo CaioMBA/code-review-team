@@ -51,6 +51,22 @@ Just ask in your own words:
 
 By default it reviews everything that would ship: uncommitted changes plus your branch compared with the main branch. It also works on files you name or code you paste into the chat. To review only the new lines, say so.
 
+## Cost and model tiers
+
+Each reviewer runs on a model tier that fits its job: the confused user, tester and UI reviewers on a **small** model, the senior, performance and data & deploy reviewers on a **mid** model, and the hacker on a **top** model when the change touches auth, tokens, payments, crypto or secrets (mid otherwise). The lead runs on your own session's model and re-checks every finding. Changes of 30 lines or fewer get two combined reviewers instead of four to seven; ask for "the full panel" to override.
+
+In Claude Code the tiers map to `haiku`, `sonnet` and `opus` automatically. In OpenCode, add three agents to `opencode.json` to enable them (otherwise every reviewer uses your default model):
+
+```json
+"agent": {
+  "review-small": { "mode": "subagent", "description": "code-review-team small-tier reviewer", "model": "anthropic/claude-haiku-4-5" },
+  "review-mid":   { "mode": "subagent", "description": "code-review-team mid-tier reviewer", "model": "anthropic/claude-sonnet-4-5" },
+  "review-top":   { "mode": "subagent", "description": "code-review-team top-tier reviewer", "model": "anthropic/claude-opus-4-5" }
+}
+```
+
+Use any provider's models; pick a small, a mid and a top one.
+
 ## Works better with (optional)
 
 The squad is complete on its own. If any of these skills are installed next to it, the matching reviewer uses them, read-only, and the report keeps the same format. None is required, and a missing one is never reported.

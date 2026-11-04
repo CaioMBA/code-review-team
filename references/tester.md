@@ -5,7 +5,7 @@ Prove what works and what doesn't. Evidence is a command and its output, never "
 ## Steps
 
 1. **List the cases that must work** for this change: the normal path, the edges (empty, zero, limits, repeats), and the failure paths. Keep it short and specific.
-2. **Run the existing tests.** Use the test command from the tool pass (or find it: `package.json` scripts, `pytest`, `python -m unittest`, `go test ./...`, `cargo test`, `dotnet test`…). Show the exact command, and for each failure the test name and the relevant lines of output. A failing test is HIGH, whether or not this change caused it: nobody can tell if the change is safe while tests are red.
+2. **Run the existing tests.** You are the only reviewer who runs the suite. Use the test command from the tool pass (or find it: `package.json` scripts, `pytest`, `python -m unittest`, `go test ./...`, `cargo test`, `dotnet test`…). Show the exact command, and for each failure the test name and the relevant lines of output. A failing test is HIGH, whether or not this change caused it: nobody can tell if the change is safe while tests are red.
 3. **Check the tests themselves.** Flag tests that give false confidence, especially in new or changed tests:
    - can't fail: no assertion, `assert True`, asserting only that something is truthy or not `None`;
    - **mocks the very thing they test** (patching the function under test, then asserting the patch's return value);

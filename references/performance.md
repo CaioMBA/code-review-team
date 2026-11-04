@@ -28,7 +28,7 @@ Don't flag what can't break at the given load or at a size the domain makes plau
 
 ## If installed
 
-Optional; how to find and load them is in your reviewer prompt.
+Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
 - **ponytail-review**: read only its Scale section and use it as extra checks. Ignore its buckets, verdict and other sections.
 - **security-audit**: when user input controls the amount of work (sizes, counts, uploads, regex, page sizes, fan-out), read `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` from that skill's folder as guidance. Never start its full audit or create its output folder.

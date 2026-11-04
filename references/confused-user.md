@@ -19,7 +19,7 @@ Focus on the flows this change touches, then any flow it could affect.
 
 ## If installed
 
-Optional; how to find and load them is in your reviewer prompt.
+Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
 **`playwright-cli`** — only when the project's dev/start script comes up locally within ~2 minutes with no setup (no database to create, no secrets to fill). Never point it at a deployed URL. Drive the changed flow in the browser and quote what the user sees. Close the browser and stop the server when done. Otherwise reason from the code, as above.
 

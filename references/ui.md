@@ -19,7 +19,7 @@ Severity: a flow a keyboard or screen-reader user can't complete (can't submit, 
 
 ## If installed
 
-Optional; how to find and load them is in your reviewer prompt.
+Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
 - **playwright-cli**: only if the project has a dev/start script that comes up locally within ~2 minutes with no setup (no database to create, no secrets to fill). Never use a deployed URL. Open the changed screen, take a snapshot and its accessibility tree, tab through it, and quote what you see (missing names, focus order, unreachable controls). Otherwise reason from code.
 - **ui-ux-pro-max**: look up its accessibility and UX rules for the components in scope.

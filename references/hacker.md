@@ -17,10 +17,10 @@ You are an attacker who just got the source. Find what you could steal, break in
 
 ## If installed
 
-Optional; how to find and load them is in your reviewer prompt.
+Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
 **`security-audit`** — guidance mode only. Never start its full audit or create its output folder (`~/security-audit-skill`).
-- Read its `SKILL.md`, then read in full, before your checklist, the companion files for the boundaries the scope touches (a reset or login flow touches "web routes, sessions, tokens"). Run each of their checks against the scope. Finding that a file exists is not using it; "Used:" lists only files you read.
+- Skip its `SKILL.md`. Before your checklist, read in full only the 1-2 companion files below that best match what the scope touches (a reset or login flow touches "web routes, sessions, tokens"), and run their checks against the scope. Finding that a file exists is not using it; "Used:" lists only files you read.
 
   | Scope touches | Read |
   |---|---|
@@ -35,7 +35,7 @@ Optional; how to find and load them is in your reviewer prompt.
   | native code, FFI, parsers | `MEMORY-SAFETY-AND-BINARY.md` |
   | desktop, mobile, local IPC | `DESKTOP-MOBILE-AND-LOCAL-IPC.md` |
 
-- From `ATTACK-CLASSES.md`, only the classes in play. From `HUNTING.md`, only "WORK FROM A CONCRETE INVARIANT" (inside "Defensive vulnerability-finding method") and the "Candidate gate".
+- From `HUNTING.md`, read only the "Candidate gate" section (grep for its heading and read that section), and apply it to each finding.
 - Map its results: `confirmed` → finding (critical/high/medium/low keep their names; drop `informational`); `needs_validation` → hotspot; trace sink → `file:line`; payload + observed result → Case; remediation → Fix.
 - Stay source-only: don't run the target's code (the tester and confused user run things). Registry lookups for "does this package exist" are still fine: they don't run target code.
 

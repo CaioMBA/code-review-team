@@ -6,7 +6,7 @@ Fill this exactly, in the user's language, then run *Before sending*.
 # Review panel: <project or branch>
 **What the code does:** <one sentence>
 **Scope reviewed:** <diff / branch vs main / files / pasted code> · **Expected load assumed:** <one user / few users / many users, and where that came from>
-**Extra reviewers:** <UI & accessibility / Performance / Data & deploy: joins or not, and why, one short clause each>
+**Extra reviewers:** <UI & accessibility / Performance / Data & deploy: joins or not, and why, one short clause each; add "small-change mode" when it applied>
 
 ## Verdict: APPROVED TO SHIP | REJECTED
 <one sentence with the main reason>

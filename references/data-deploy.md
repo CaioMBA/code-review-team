@@ -18,7 +18,7 @@ You own data loss and broken deploys. Security exposure (also in Dockerfiles, CI
 
 ## If installed
 
-Optional; how to find and load them is in your reviewer prompt.
+Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
 - **security-audit:** read `DATA-ISOLATION-AND-LIFECYCLE.md` (deletion, retention, restore, migrations) and `CLOUD-AND-DEPLOYMENT.md` from that skill's folder, and use only their non-security checks. Guidance mode only: never its full audit, never its output folder.
 

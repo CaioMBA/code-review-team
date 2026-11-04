@@ -18,37 +18,47 @@ The panel is complete on its own. Some reviewers get sharper when certain other 
 3. **Full review, always.** Reviewers read the code *around* the change too: callers, helpers it should have reused, tests, config. A five-line change can duplicate an existing function or break a caller. Review only the new lines if, and only if, the user explicitly asks for that.
 4. **Expected load.** One person running a script, a few users, or many users at once? Find it in the README/deploy config. If nothing states it, assume **few users**. Say which you assumed and where it came from.
 5. **Which extra reviewers join.** Reviewers 1-4 always run. Reviewers 5-7 join only when their condition holds (table in Step 2). Decide from the files and content in scope (pasted code included), and write one line per extra reviewer: joins or not, and why ("Performance: joins - new query inside a loop over orders").
-6. **Your own helpers.** Note whether you have a `memory` tool (Step 3) and the skills `receiving-code-review`, `systematic-debugging`, `verification-before-completion` (Step 4), found the way the reviewer prompt below describes. Reviewers find and load their own helper skills; don't load those yourself.
+6. **Small change?** If the scope is 30 changed lines or fewer (`git diff --shortstat`, or the size of the paste) and the user didn't ask for the full panel, use **small-change mode** in Step 2.
+7. **Helper skills, one lookup.** Run one file search for `*/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, `~/.claude/plugins` (recursive) and the repo's `.claude/skills` and `.agents/skills`, and also check your own skill list (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`). Keep the path of each of these if found: `security-audit`, `ponytail-review`, `ponytail-debt`, `playwright-cli`, `ui-ux-pro-max`, `impeccable`, `review-animations`, `mobile-native` (for reviewers); `receiving-code-review`, `systematic-debugging`, `verification-before-completion` (Step 4). Also note whether you have a `memory` tool (Step 3). Don't read the reviewers' helpers yourself.
 
 ## Step 1: Tool pass
 
-Before the reviewers start, collect hard evidence. Read [references/tools.md](references/tools.md) and run, in this order: the project's own scripts (lint, typecheck, test), then tools that are **already installed** for the stack, then a secret scan and dependency audit if available. **Never install anything** without asking. Record each command and a one-line result; a tool that isn't available goes in *Not checked*. Keep the raw output for the reviewers.
+Before the reviewers start, collect hard evidence. Read [references/tools.md](references/tools.md) and run, in this order: the project's own scripts (lint, typecheck, test), then tools that are **already installed** for the stack, then a secret scan and dependency audit if available. **Never install anything** without asking. Record each command and a one-line result; a tool that isn't available goes in *Not checked*. Keep the raw output for the reviewers, and save the full diff of the scope: both go into every reviewer's prompt, so reviewers don't re-run them.
 
 ## Step 2: The panel
 
-**Change nothing in this step.** Reviewers may run commands and tests. Only the tester may create files, and only *new* test files. No existing file is modified.
+**Change nothing in this step.** Only the tester runs the test suite; other reviewers may run small targeted checks (one bad input, one query count). Only the tester may create files, and only *new* test files. No existing file is modified.
 
-| # | Reviewer | Role file | Joins | Hunts for |
-|---|---|---|---|---|
-| 1 | Hacker | [references/hacker.md](references/hacker.md) | always | secrets, data exposure, injection, missing auth, weak crypto, fake or risky dependencies |
-| 2 | Confused user | [references/confused-user.md](references/confused-user.md) | always | wrong, empty, huge, repeated input; broken flows; what error the user actually sees |
-| 3 | Senior engineer | [references/senior.md](references/senior.md) | always | duplication of existing code, broken callers, scope creep, half-finished code, maintainability |
-| 4 | Tester | [references/tester.md](references/tester.md) | always | runs the tests, finds tests that can't fail, writes the missing ones |
-| 5 | UI & accessibility | [references/ui.md](references/ui.md) | scope touches front-end: `.html .css .scss .less`, JS/TS that touches the DOM, `.jsx .tsx .vue .svelte .astro`, server templates, or mobile UI code (SwiftUI, Compose, React Native, Flutter widgets) | flows keyboard and screen-reader users can't finish, missing labels, contrast, error/empty/loading states, phone layouts |
-| 6 | Performance | [references/performance.md](references/performance.md) | expected load is "many users", **or** scope adds/changes DB queries, loops over data from input or storage, caches, background jobs/queues, or network/paid-API calls | what breaks at scale, by reading code only: query per item, unbounded lists and caches, races, per-process state |
-| 7 | Data & deploy | [references/data-deploy.md](references/data-deploy.md) | scope touches migrations, schema/ORM models, Dockerfile/compose, CI workflows, IaC, deploy/cron/backup scripts, or env/config files and the code that reads new settings | data loss in migrations, deploy-order breakage, missing settings that crash on deploy |
+| # | Reviewer | Role file | Joins | Tier | Hunts for |
+|---|---|---|---|---|---|
+| 1 | Hacker | [references/hacker.md](references/hacker.md) | always | **top** if scope touches auth, sessions, tokens, permissions, payments, crypto or secret handling; else mid | secrets, data exposure, injection, missing auth, weak crypto, fake or risky dependencies |
+| 2 | Confused user | [references/confused-user.md](references/confused-user.md) | always | small | wrong, empty, huge, repeated input; broken flows; what error the user actually sees |
+| 3 | Senior engineer | [references/senior.md](references/senior.md) | always | mid | duplication of existing code, broken callers, scope creep, half-finished code, maintainability |
+| 4 | Tester | [references/tester.md](references/tester.md) | always | small | runs the tests, finds tests that can't fail, writes the missing ones |
+| 5 | UI & accessibility | [references/ui.md](references/ui.md) | scope touches front-end: `.html .css .scss .less`, JS/TS that touches the DOM, `.jsx .tsx .vue .svelte .astro`, server templates, or mobile UI code (SwiftUI, Compose, React Native, Flutter widgets) | small | flows keyboard and screen-reader users can't finish, missing labels, contrast, error/empty/loading states, phone layouts |
+| 6 | Performance | [references/performance.md](references/performance.md) | expected load is "many users", **or** scope adds queries inside loops, reads with no limit (all rows, whole files), caches, background jobs/queues, or network/paid-API calls on a request path | mid | what breaks at scale, by reading code only: query per item, unbounded lists and caches, races, per-process state |
+| 7 | Data & deploy | [references/data-deploy.md](references/data-deploy.md) | scope touches migrations, schema/ORM models, Dockerfile/compose, CI workflows, IaC, deploy/cron/backup scripts, or env/config files and the code that reads new settings | mid | data loss in migrations, deploy-order breakage, missing settings that crash on deploy |
+
+**Model tier.** Start each reviewer on its tier when your subagent tool lets you choose: in Claude Code pass `model` (small = `haiku`, mid = `sonnet`, top = `opus`); in OpenCode use the agent `review-small`, `review-mid` or `review-top` if it exists in the config. Otherwise use the default model. Never ask the user about it.
+
+**Small-change mode** (Step 0): two subagents instead of one per reviewer, still never you alone:
+- **A** covers Hacker + Senior engineer, plus Performance and Data & deploy if they join; tier as the hacker's.
+- **B** covers Confused user + Tester, plus UI & accessibility if it joins; small tier.
+Each reads every role file it covers and reports one section per role, so the report keeps one panel-notes subsection per role.
 
 **Who owns what** when roles overlap: Data & deploy owns data loss and broken deploys; Hacker owns security exposure (also in Dockerfiles, CI and IaC); Performance owns scale; Confused user owns single-request misuse.
 
-**Dispatch the panel; don't review alone.** If you have any subagent tool (`Task`, `Agent`, `subagent`, ...), you **must** start one subagent per reviewer that joins, all in the same message so they run in parallel, even for a tiny change and even when other instructions say to keep work minimal: a single agent reviewing alone skips the independence the panel exists for. Give each one exactly this, and nothing from your own conversation:
+**Dispatch the panel; don't review alone.** If you have any subagent tool (`Task`, `Agent`, `subagent`, ...), you **must** start one subagent per reviewer that joins (two in small-change mode), all in the same message so they run in parallel, even for a tiny change and even when other instructions say to keep work minimal: a single agent reviewing alone skips the independence the panel exists for. Give each one exactly this, and nothing from your own conversation:
 
 ```
 You are reviewer <N>, the <role>, on a pre-ship review panel. Read your role file first and follow it:
 <absolute path to references/<role-file>.md>
 What the code does: <one sentence>
-Scope: <diff commands / files / pasted code>   Repo root: <path>   Expected load: <assumption and source>
-Tool pass results: <commands + results, raw output for failures>
-Helper skills: before your checklist, look for each skill in your role file's "If installed" section, in your skill list (names may have a plugin prefix, e.g. ponytail:ponytail-review) and with one file search for <name>/SKILL.md under ~/.claude/skills, ~/.agents/skills, ~/.config/opencode/skills, ~/.claude/plugins/**/skills and the repo's .claude/skills and .agents/skills. Read each one you find and do what your role file says with it; skip missing ones silently. Read-only: never edit files, install, download or wait for a human. Your checklist still runs, and the panel's format and severities win over the helper's (drop its verdicts and buckets).
+Scope: <files / pasted code>   Repo root: <path>   Expected load: <assumption and source>
+Diff: <the full diff; if over ~400 lines, the diff commands instead>
+Tool pass results: <commands + results, raw output for failures> - don't re-run these.
+Helper skills: <name → path, only those your role file's "If installed" names | none found>
+If that list says none found and you have a skill tool, check your skill list once for those names. Read only the parts of each helper your role file names, and do what it says with them. Read-only: never edit files, install, download or wait for a human. Your checklist still runs, and the panel's format and severities win over the helper's (drop its verdicts and buckets).
 Report in <user's language>. Use only CRITICAL/HIGH/MEDIUM/LOW. Return only your findings in the format the role file gives, then "Checked: <what you looked at>" and, if you read a helper skill, "Used: <skills and files you read>". Nothing found: say so and list what you checked.
 ```
 
@@ -99,4 +109,4 @@ When the user asks to fix ("fix it", "go ahead", "corrige", "fix 1 and 3"):
 4. Re-run the **whole** panel (Steps 0-3) on the fixed code, not just the fixed items: fixes create bugs too. The gate uses the **full** test suite, the tester's new test files included. A red test is never excluded or relabeled: either the code or the test is wrong, and that gets fixed or reported as an open HIGH.
 5. Give the new verdict and a short **round 1 → round 2** comparison: what was fixed, what is still open, anything new. Round 2 uses the same report template as round 1.
 
-If these skills are available, use them in this loop: `receiving-code-review` before each fix (is the finding still right?), `systematic-debugging` when a fix's tests fail, `verification-before-completion` before stating the round 2 result. The panel's rules win over theirs: don't stop the loop to ask. A finding that turns out wrong is skipped with the reason; a fix that still fails after one debugging pass stays open and goes in the round comparison.
+If Step 0 found these skills, use them in this loop: `receiving-code-review` before each fix (is the finding still right?), `systematic-debugging` when a fix's tests fail, `verification-before-completion` before stating the round 2 result. The panel's rules win over theirs: don't stop the loop to ask. A finding that turns out wrong is skipped with the reason; a fix that still fails after one debugging pass stays open and goes in the round comparison.
