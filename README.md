@@ -73,15 +73,31 @@ Tiers are recommended, not required. If your company only gives you some models,
 
 The squad is complete on its own. If any of these skills are installed next to it, the matching reviewer uses them, read-only, and the report keeps the same format. None is required, and a missing one is never reported.
 
-| Skill | Used by | Adds |
-|---|---|---|
-| [security-audit](https://github.com/cloudflare/security-audit-skill) | Hacker, Performance, Data & deploy | deeper attack-class checks, loaded only for what your change touches (guidance mode, never a full audit) |
-| [ponytail](https://github.com/DietrichGebert/ponytail) (`ponytail-review`, `ponytail-debt`) | Senior | lean checks (delete, reuse, stdlib, yagni) and `shortcut:` markers whose limit you've outgrown |
-| playwright-cli | Confused user, UI | drives the changed flow in a real browser, if the app starts locally with no setup |
-| ui-ux-pro-max, impeccable, review-animations, mobile-native | UI | accessibility and UX rules, motion and mobile-web checks |
-| superpowers (`receiving-code-review`, `systematic-debugging`, `verification-before-completion`) | fix loop | checks each finding before fixing, debugs failing fixes, verifies before claiming round 2 |
-| a `memory` tool (e.g. opencode-mem) | Lead | remembers your answers to hotspots and shows them next time |
-| `ast-grep` | Senior | structural search for duplicates and callers |
+| Skill | Source | Used by | Adds |
+|---|---|---|---|
+| `security-audit` | [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | Hacker, Performance, Data & deploy | deeper attack-class checks, loaded only for what your change touches (guidance mode, never a full audit) |
+| `ponytail-review`, `ponytail-debt` | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | Senior | lean checks (delete, reuse, stdlib, yagni) and `shortcut:` markers whose limit you've outgrown |
+| `playwright-cli` | [microsoft/playwright-cli](https://github.com/microsoft/playwright-cli) | Confused user, UI | drives the changed flow in a real browser, if the app starts locally with no setup |
+| `ui-ux-pro-max` | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | UI | accessibility and UX rules |
+| `impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | UI | UI audit (only if its CLI is already set up) |
+| `review-animations`, `mobile-native` | [emilkowalski/skill](https://github.com/emilkowalski/skill) | UI | motion review and mobile-web checks |
+| `receiving-code-review`, `systematic-debugging`, `verification-before-completion` | [obra/superpowers](https://github.com/obra/superpowers) | fix loop | checks each finding before fixing, debugs failing fixes, verifies before claiming round 2 |
+| a `memory` tool, e.g. opencode-mem | [tickernelz/opencode-mem](https://github.com/tickernelz/opencode-mem) (OpenCode plugin) | Lead | remembers your answers to hotspots and shows them next time |
+| `ast-grep` (a CLI, not a skill) | [ast-grep/ast-grep](https://github.com/ast-grep/ast-grep) | Senior | structural search for duplicates and callers |
+
+Install all the optional skills with the [skills CLI](https://github.com/vercel-labs/skills) (add `-g` for your user folder instead of the project, and `-a claude-code`, `-a opencode`, ... to pick agents):
+
+```bash
+npx skills add cloudflare/security-audit-skill -s security-audit
+npx skills add DietrichGebert/ponytail -s ponytail-review -s ponytail-debt
+npx skills add microsoft/playwright-cli -s playwright-cli
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill -s ui-ux-pro-max
+npx skills add pbakaus/impeccable -s impeccable
+npx skills add emilkowalski/skill -s review-animations -s mobile-native
+npx skills add obra/superpowers -s receiving-code-review -s systematic-debugging -s verification-before-completion
+```
+
+Pick only the ones you want. Some of these also ship as Claude Code plugins or OpenCode plugins (superpowers, ponytail); either way works, the panel finds them by name. `playwright-cli` also needs Playwright (its `SKILL.md` has an Installation section), and `ast-grep` is installed as a normal tool (e.g. `npm i -g @ast-grep/cli`).
 
 ## Layout
 
