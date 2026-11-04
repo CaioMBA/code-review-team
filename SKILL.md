@@ -39,7 +39,10 @@ Before the reviewers start, collect hard evidence. Read [references/tools.md](re
 | 6 | Performance | [references/performance.md](references/performance.md) | expected load is "many users", **or** scope adds queries inside loops, reads with no limit (all rows, whole files), caches, background jobs/queues, or network/paid-API calls on a request path | mid | what breaks at scale, by reading code only: query per item, unbounded lists and caches, races, per-process state |
 | 7 | Data & deploy | [references/data-deploy.md](references/data-deploy.md) | scope touches migrations, schema/ORM models, Dockerfile/compose, CI workflows, IaC, deploy/cron/backup scripts, or env/config files and the code that reads new settings | mid | data loss in migrations, deploy-order breakage, missing settings that crash on deploy |
 
-**Model tier.** Start each reviewer on its tier when your subagent tool lets you choose: in Claude Code pass `model` (small = `haiku`, mid = `sonnet`, top = `opus`); in OpenCode use the agent `review-small`, `review-mid` or `review-top` if it exists in the config. Otherwise use the default model. Never ask the user about it.
+**Model tier.** Start each reviewer on its tier when your subagent tool lets you choose: in Claude Code pass `model` (small = `haiku`, mid = `sonnet`, top = `opus`); in OpenCode use the agent `review-small`, `review-mid` or `review-top` if it exists in the config. Tiers are recommended, never required:
+- No way to choose a model, or the user/project says not to use tiers ("no model tiers", "use my default model"): every reviewer runs on the default model.
+- A tier's model is refused or unavailable (access, policy, quota, unknown model): restart that reviewer once on the next tier down that worked this session, else on the default model. Never stop the review over it, and never ask the user.
+- Say it in one line under *Not checked* only when a reviewer ran below its tier ("Hacker ran on mid: top tier unavailable"), since its findings may be weaker.
 
 **Small-change mode** (Step 0): two subagents instead of one per reviewer, still never you alone:
 - **A** covers Hacker + Senior engineer, plus Performance and Data & deploy if they join; tier as the hacker's.

@@ -67,6 +67,8 @@ In Claude Code the tiers map to `haiku`, `sonnet` and `opus` automatically. In O
 
 Use any provider's models; pick a small, a mid and a top one.
 
+Tiers are recommended, not required. If your company only gives you some models, the panel still runs: a reviewer whose model is refused or unavailable is restarted once on the next tier down, else on your default model, and the report says which reviewers ran below their tier. To skip tiers entirely, say "use my default model" (or put that in your `AGENTS.md`/`CLAUDE.md`).
+
 ## Works better with (optional)
 
 The squad is complete on its own. If any of these skills are installed next to it, the matching reviewer uses them, read-only, and the report keeps the same format. None is required, and a missing one is never reported.
