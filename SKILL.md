@@ -20,6 +20,7 @@ The panel is complete on its own. Some reviewers get sharper when certain other 
 5. **Which extra reviewers join.** Reviewers 1-4 always run. Reviewers 5-7 join only when their condition holds (table in Step 2). Decide from the files and content in scope (pasted code included), and write one line per extra reviewer: joins or not, and why ("Performance: joins - new query inside a loop over orders").
 6. **Small change?** If the scope is 30 changed lines or fewer (`git diff --shortstat`, or the size of the paste) and the user didn't ask for the full panel, use **small-change mode** in Step 2.
 7. **Helper skills, one lookup.** Run one file search for `*/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, `~/.claude/plugins` (recursive) and the repo's `.claude/skills` and `.agents/skills`, and also check your own skill list (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`). Keep the path of each of these if found: `security-audit`, `ponytail-review`, `ponytail-debt`, `playwright-cli`, `ui-ux-pro-max`, `impeccable`, `review-animations`, `mobile-native` (for reviewers); `receiving-code-review`, `systematic-debugging`, `verification-before-completion` (Step 4). Also note whether you have a `memory` tool (Step 3). Don't read the reviewers' helpers yourself.
+8. **Code graph (graphify).** Only if `graphify-out/graph.json` already exists in the repo and `graphify --help` runs (else try `python -m graphify --help`): note the working command, the graph path and its last-modified time. Never build a graph or call an LLM through graphify. If the graph is older than the newest change in scope, it may be stale; reviewers still use it, but only as a pointer.
 
 ## Step 1: Tool pass
 
@@ -61,7 +62,8 @@ Scope: <files / pasted code>   Repo root: <path>   Expected load: <assumption an
 Diff: <the full diff; if over ~400 lines, the diff commands instead>
 Tool pass results: <commands + results, raw output for failures> - don't re-run these.
 Helper skills: <name → path, only those your role file's "If installed" names | none found>
-If that list says none found and you have a skill tool, check your skill list once for those names. Read only the parts of each helper your role file names, and do what it says with them. Read-only: never edit files, install, download or wait for a human. Your checklist still runs, and the panel's format and severities win over the helper's (drop its verdicts and buckets).
+Graph: <graphify command, graph path, built <time>, "possibly stale" if older than the change | none>
+If that list says none found and you have a skill tool, check your skill list once for those names. If a Graph is given and your role file's "If installed" names graphify: run only `explain`, `path` and `query`, at most 5 times, never `update`, `extract`, `hook`, `prs`, `add` or a build. The graph shows where to look; every finding still needs a `file:line` you read yourself. Read only the parts of each helper your role file names, and do what it says with them. Read-only: never edit files, install, download or wait for a human. Your checklist still runs, and the panel's format and severities win over the helper's (drop its verdicts and buckets).
 Report in <user's language>. Use only CRITICAL/HIGH/MEDIUM/LOW. Return only your findings in the format the role file gives, then "Checked: <what you looked at>" and, if you read a helper skill, "Used: <skills and files you read>". Nothing found: say so and list what you checked.
 ```
 
@@ -87,9 +89,10 @@ Read the reports of every reviewer that joined and:
 1. **Merge duplicates** across reviewers and credit everyone who found it. Merge only reports of the *same* problem; different problems stay separate items even on the same line, and one root cause gets one item, not several that point at each other.
 2. **Re-check each finding** against the code: the line exists, the value can really be empty, the caller is real. Drop what you can't confirm. A `shortcut:` comment that names its limit is a decision, not a finding, unless the expected load crosses it.
 3. **Fix severities** that are inflated or understated, using the severity table. Lower a reviewer's severity only for a reason that holds for every affected user: a flow a keyboard or screen-reader user can't finish stays HIGH even if a mouse user gets through.
-4. **Clean up after the panel.** Delete caches the panel's runs created (`__pycache__`, `.pytest_cache`, `node_modules/.cache`) if they weren't there before, and list every new file the tester created so the user can keep or delete it.
-5. **Hotspot memory** (only if you have a `memory` tool): search it for an earlier answer to each hotspot (same file, same question). Still list the hotspot, marked "previously answered: <answer>, <date>", so the user can see if things changed. Save an answer only when the user gives one in the chat. Never drop a hotspot because of memory.
-6. **Apply the gate** and give **one** verdict:
+4. **Reach** (only if Step 0 found a graph): run `graphify explain "<name>"` for up to 3 changed public functions or classes, for the report's *Reach* line, and use it to double-check "broken caller" findings against the code.
+5. **Clean up after the panel.** Delete caches the panel's runs created (`__pycache__`, `.pytest_cache`, `node_modules/.cache`) if they weren't there before, and list every new file the tester created so the user can keep or delete it.
+6. **Hotspot memory** (only if you have a `memory` tool): search it for an earlier answer to each hotspot (same file, same question). Still list the hotspot, marked "previously answered: <answer>, <date>", so the user can see if things changed. Save an answer only when the user gives one in the chat. Never drop a hotspot because of memory.
+7. **Apply the gate** and give **one** verdict:
 
 **APPROVED TO SHIP** only if all of these hold:
 - no CRITICAL or HIGH finding tagged **new**;
@@ -110,6 +113,7 @@ When the user asks to fix ("fix it", "go ahead", "corrige", "fix 1 and 3"):
 2. If there are uncommitted changes, suggest a commit first so the fixes are easy to check and undo.
 3. Fix the requested items (all of them by default), **most severe first, one at a time**, running the relevant tests after each. Fix only what the finding describes: no new behavior, formats or refactors. If a fix needs a behavior change the user didn't ask for, leave it open and say why.
 4. Re-run the **whole** panel (Steps 0-3) on the fixed code, not just the fixed items: fixes create bugs too. The gate uses the **full** test suite, the tester's new test files included. A red test is never excluded or relabeled: either the code or the test is wrong, and that gets fixed or reported as an open HIGH.
-5. Give the new verdict and a short **round 1 → round 2** comparison: what was fixed, what is still open, anything new. Round 2 uses the same report template as round 1.
+5. **Refresh the code graph** before writing the final report, only if the final round is APPROVED, Step 0 found a graph, `graphify hook status` shows no git hook installed (a hook already refreshes it on commit), and `graphify-out/` isn't tracked by git (`git ls-files graphify-out` is empty): run `graphify update .` (code only, no LLM) and list `graphify-out/` among the files you changed. Otherwise, if the graph was possibly stale, say "run `graphify update .`" under *Not checked*.
+6. Give the new verdict and a short **round 1 → round 2** comparison: what was fixed, what is still open, anything new. Round 2 uses the same report template as round 1.
 
 If Step 0 found these skills, use them in this loop: `receiving-code-review` before each fix (is the finding still right?), `systematic-debugging` when a fix's tests fail, `verification-before-completion` before stating the round 2 result. The panel's rules win over theirs: don't stop the loop to ask. A finding that turns out wrong is skipped with the reason; a fix that still fails after one debugging pass stays open and goes in the round comparison.

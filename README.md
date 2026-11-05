@@ -83,6 +83,7 @@ The squad is complete on its own. If any of these skills are installed next to i
 | `review-animations`, `mobile-native` | [emilkowalski/skill](https://github.com/emilkowalski/skill) | UI | motion review and mobile-web checks |
 | `receiving-code-review`, `systematic-debugging`, `verification-before-completion` | [obra/superpowers](https://github.com/obra/superpowers) | fix loop | checks each finding before fixing, debugs failing fixes, verifies before claiming round 2 |
 | a `memory` tool, e.g. opencode-mem | [tickernelz/opencode-mem](https://github.com/tickernelz/opencode-mem) (OpenCode plugin) | Lead | remembers your answers to hotspots and shows them next time |
+| `graphify` (CLI + skill) | [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) | Senior, Hacker, Performance, Lead | a code graph: callers, input-to-sink paths, what runs per request, and a *Reach* line in the report. Used only if you already built a graph (`graphify-out/graph.json`); the panel never builds one, and only refreshes it with `graphify update .` (code only, no LLM) after a fix loop ends APPROVED |
 | `ast-grep` (a CLI, not a skill) | [ast-grep/ast-grep](https://github.com/ast-grep/ast-grep) | Senior | structural search for duplicates and callers |
 
 Install all the optional skills with the [skills CLI](https://github.com/vercel-labs/skills) (add `-g` for your user folder instead of the project, and `-a claude-code`, `-a opencode`, ... to pick agents):
@@ -96,6 +97,9 @@ npx skills add pbakaus/impeccable -s impeccable
 npx skills add emilkowalski/skill -s review-animations -s mobile-native
 npx skills add obra/superpowers -s receiving-code-review -s systematic-debugging -s verification-before-completion
 ```
+
+For graphify (a Python CLI, needs Python 3.10+): `uv tool install graphifyy` (or `pipx install graphifyy`), then `graphify install`, then build the graph once in your project with `/graphify .` in your assistant, or `graphify extract . --code-only` for a code-only graph with no LLM. `graphify hook install` keeps it current on every commit.
+
 
 Pick only the ones you want. Some of these also ship as Claude Code plugins or OpenCode plugins (superpowers, ponytail); either way works, the panel finds them by name. `playwright-cli` also needs Playwright (its `SKILL.md` has an Installation section), and `ast-grep` is installed as a normal tool (e.g. `npm i -g @ast-grep/cli`).
 

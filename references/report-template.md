@@ -7,6 +7,7 @@ Fill this exactly, in the user's language, then run *Before sending*.
 **What the code does:** <one sentence>
 **Scope reviewed:** <diff / branch vs main / files / pasted code> · **Expected load assumed:** <one user / few users / many users, and where that came from>
 **Extra reviewers:** <UI & accessibility / Performance / Data & deploy: joins or not, and why, one short clause each; add "small-change mode" when it applied>
+**Reach:** <only if a code graph was used: e.g. "`normalize_email` has 7 callers in 3 modules"; omit otherwise>
 
 ## Verdict: APPROVED TO SHIP | REJECTED
 <one sentence with the main reason>
@@ -66,6 +67,7 @@ Use the user's language. Portuguese labels are fixed; for other languages, trans
 | Review panel | Banca de revisão |
 | What the code does | O que o código faz |
 | Scope reviewed | Escopo revisado |
+| Reach | Alcance |
 | Expected load assumed | Carga esperada considerada |
 | Verdict | Veredito |
 | APPROVED TO SHIP | APROVADO PRA SUBIR |

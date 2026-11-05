@@ -19,6 +19,8 @@ You are an attacker who just got the source. Find what you could steal, break in
 
 Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
+**graphify** (prompt's "Graph" line) - for each risky call the change adds (SQL, shell, file paths, HTML output, redirects, deserialization), run `path "<route or entry point>" "<risky call>"` to see whether user input can reach it, then read that path in the code.
+
 **`security-audit`** — guidance mode only. Never start its full audit or create its output folder (`~/security-audit-skill`).
 - Skip its `SKILL.md`. Before your checklist, read in full only the 1-2 companion files below that best match what the scope touches (a reset or login flow touches "web routes, sessions, tokens"), and run their checks against the scope. Finding that a file exists is not using it; "Used:" lists only files you read.
 

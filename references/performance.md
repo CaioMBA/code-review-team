@@ -30,6 +30,7 @@ Don't flag what can't break at the given load or at a size the domain makes plau
 
 Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
+- **graphify** (prompt's "Graph" line): for each request handler or job the change touches, run `explain "<handler>"` to see what it calls per request (DB, network, loops), then read those calls in the code.
 - **ponytail-review**: read only its Scale section and use it as extra checks. Ignore its buckets, verdict and other sections.
 - **security-audit**: when user input controls the amount of work (sizes, counts, uploads, regex, page sizes, fan-out), read `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` from that skill's folder as guidance. Never start its full audit or create its output folder.
 

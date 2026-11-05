@@ -17,6 +17,7 @@ Scale and load are the performance reviewer's job; skip them. No style taste, no
 
 Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
+- **graphify** (prompt's "Graph" line) - before grepping, run `explain "<changed function>"` to list its callers, and `query "<what the new code does>"` to find existing helpers doing the same job. Read each caller and candidate it names; then grep for what the graph may miss (dynamic calls, other languages).
 - **`ponytail-review`** - read its `SKILL.md` (it's short; knowing the names below is not using it), then take its *Lean* checks (delete, reuse, stdlib/native, yagni, merge, split) and its "fix applied in one caller while the shared function stays broken" check. Skip its Risk, Missing-test and Scale parts, its Must/Should/Nice buckets, its verdict and its `Lean: -N` line.
 - **`ponytail-debt`** — run its marker search on the files in scope only: `git grep --no-index --exclude-standard -nE '(#|//|/[*]) ?(shortcut|ponytail):' -- <files>`. A marker with no upgrade trigger in **new** code is LOW. A marker whose stated limit the expected load already crosses is a finding, severity by impact. Other markers are decisions, not findings.
 
