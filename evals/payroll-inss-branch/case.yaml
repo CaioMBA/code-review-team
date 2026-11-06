@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: payroll-inss-branch
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Privacy & law joins (code computes a legal payroll rule). It flags that inss() applies one flat rate to the whole salary instead of the progressive brackets (for R$ 3,000 it returns 360.00; the progressive 2026 table gives about 253.41) and that the ceiling is not applied, as HIGH or above, with file:line. The tester notes the new test only checks the buggy value. Verdict REJECTED. No tracked file changed. English.

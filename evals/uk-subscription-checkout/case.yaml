@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: uk-subscription-checkout
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Privacy & law joins (personal data sent to a vendor, marketing consent, cancellation and price disclosure). It flags that the marketing checkbox is pre-ticked, that cancellation is only by phone while signup is online, that the order email and address go to a US email-marketing vendor, and that the total shown before payment leaves out the delivery fee charged afterwards. Verdict REJECTED. No tracked file changed. English.

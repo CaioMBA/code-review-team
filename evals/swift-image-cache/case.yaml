@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: swift-image-cache
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  The panel reviews Swift code it cannot build. It flags that ImageCache mutates a shared dictionary from many threads with no actor or lock (data race), that observe/onUpdate is dead code (the stored handler captures self but is never called), that the cache never evicts (memory grows without bound in a scrolling feed), and the force unwrap of URL(string:)!. Verdict REJECTED. No tracked file changed. English.
