@@ -61,7 +61,7 @@ Fill this table through the profile and the Step 2 models, and show it:
 
 **If installed** (optional; look in the same skill and agent folders as Step 1, skip silently when missing):
 - **`cavecrew` agents** (an agent file named `cavecrew-investigator` exists, from the caveman plugin): route searches there instead of creating `search`, and set its model to the small tier only where the tool allows a model per agent. Its answers are compressed `path:line` lists, so each search costs the main session less.
-- **`caveman-explore` skill**: when you create a `search` agent, make its body "Read and follow the `caveman-explore` skill at <path>." instead of the default, so it returns only `path:line` lists. Keep it read-only.
+- **`caveman-explore` skill**: when you create a `search` agent (or Claude Code's `Explore` override), make its body "Read and follow the `caveman-explore` skill at <path>." instead of the default, so it returns only `path:line` lists. Keep it read-only.
 - **`caveman-stats` / `caveman-learn`**: in Step 7, suggest measuring token use with them before and after this setup. Never claim a saving you haven't measured.
 
 ## Step 5: Show the change
