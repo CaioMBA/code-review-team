@@ -1,6 +1,0 @@
-schema_version: "1.1"
-name: corrige-e-revisa-de-novo
-context:
-  scaffold_script: place-files.sh
-expected_outcome: |
-  Primeira rodada da banca com veredito REPROVADO, correções do mais grave ao menos grave (senha fora do código, situacao(7) aprovado, lista vazia e entrada inválida tratadas), testes passando, segunda rodada completa da banca e veredito final.

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: migration-drops-column
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  The panel reviews the feature/contacts branch against main and runs the tests (they pass). Data & deploy joins (a new migration and config read from the environment); UI & accessibility does not join (no front-end files). It flags as CRITICAL that 002_contacts.sql does DROP COLUMN phone without copying the phone numbers into contacts, and that config.py reads os.environ["SMTP_HOST"] with no default and no mention in the README, crashing the app on deploy. Verdict REJECTED, with one fix list ranked by severity citing file:line. No existing file is changed. The answer is in English.

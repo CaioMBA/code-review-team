@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: pasted-signup-form
+expected_outcome: |
+  The panel reviews the pasted code, flags the password in the console, the token in the URL, XSS via innerHTML, the NaN age and the double submit, gives the verdict REJECTED and saves the report to report.md.

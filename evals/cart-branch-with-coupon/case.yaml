@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: cart-branch-with-coupon
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  The panel runs the 4 reviewers on the feature/coupon branch diff against main, runs the tests, and the lead gives the verdict REJECTED, with one fix list ranked by severity citing file:line. No existing file is changed.
