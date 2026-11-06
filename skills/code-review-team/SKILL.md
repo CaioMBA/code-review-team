@@ -1,6 +1,6 @@
 ---
 name: code-review-team
-description: Pre-ship code review by an adversarial panel (hacker, confused user, senior engineer, tester, plus UI, performance and data/deploy reviewers when relevant) that returns one verdict, APPROVED TO SHIP or REJECTED, and one fix list ranked by severity with file:line. Use for every code review and every "ok to push/merge/deploy?" question, even about a tiny change, instead of answering from a quick look. Covers PR/branch/diff reviews, "check my code before I commit", bug or security sweeps, AI-written code, and "fix it and review again". Also Portuguese requests like "revisa antes de eu subir", "posso dar push?", "tá pronto pra produção?", "chama a banca". Answers in the user's language.
+description: Pre-ship code review by an adversarial panel (hacker, confused user, senior engineer, tester, plus UI, performance and data/deploy reviewers when relevant) that returns one verdict, APPROVED TO SHIP or REJECTED, and one fix list ranked by severity with file:line. Use for every code review and every "ok to push/merge/deploy?" question, even about a tiny change, instead of answering from a quick look. Covers PR/branch/diff reviews, "check my code before I commit", bug or security sweeps, AI-written code, and "fix it and review again". Answers in the user's language.
 ---
 
 # Code Review Team: adversarial pre-ship panel
@@ -9,7 +9,7 @@ The panel's job is to **try to reject** the code before it ships. The user is us
 
 The panel is complete on its own. Some reviewers get sharper when certain other skills are installed; when they aren't, nothing is missing and nothing is reported about them.
 
-**Language.** Write the whole report in the language the user wrote in; default to English. Labels, verdict and severities come from the table in [references/report-template.md](references/report-template.md) (Portuguese verdicts: **APROVADO PRA SUBIR** / **REPROVADO**).
+**Language.** Write the report in the language the user wrote in (English by default): translate headings, labels, verdict and severities yourself, and keep the structure, severity order and `file:line`.
 
 ## Step 0: Understand what is being reviewed
 
@@ -19,8 +19,9 @@ The panel is complete on its own. Some reviewers get sharper when certain other 
 4. **Expected load.** One person running a script, a few users, or many users at once? Find it in the README/deploy config. If nothing states it, assume **few users**. Say which you assumed and where it came from.
 5. **Which extra reviewers join.** Reviewers 1-4 always run. Reviewers 5-7 join only when their condition holds (table in Step 2). Decide from the files and content in scope (pasted code included), and write one line per extra reviewer: joins or not, and why ("Performance: joins - new query inside a loop over orders").
 6. **Small change?** If the scope is 30 changed lines or fewer (`git diff --shortstat`, or the size of the paste) and the user didn't ask for the full panel, use **small-change mode** in Step 2.
-7. **Helper skills, one lookup.** Run one file search for `*/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, `~/.claude/plugins` (recursive) and the repo's `.claude/skills` and `.agents/skills`, and also check your own skill list (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`). Keep the path of each of these if found: `security-audit`, `ponytail-review`, `ponytail-debt`, `playwright-cli`, `ui-ux-pro-max`, `impeccable`, `review-animations`, `mobile-native` (for reviewers); `receiving-code-review`, `systematic-debugging`, `verification-before-completion` (Step 4). Also note whether you have a `memory` tool (Step 3). Don't read the reviewers' helpers yourself.
+7. **Helper skills, one lookup.** Run one file search for `*/SKILL.md` under `~/.claude/skills`, `~/.agents/skills`, `~/.config/opencode/skills`, `~/.cursor/skills`, `~/.copilot/skills`, `~/.claude/plugins` (recursive) and the repo's `.claude/skills`, `.agents/skills`, `.opencode/skills`, `.cursor/skills` and `.github/skills`, and also check your own skill list (names may carry a plugin prefix, e.g. `ponytail:ponytail-review`). Keep the path of each of these if found: `security-audit`, `ponytail-review`, `ponytail-debt`, `playwright-cli`, `ui-ux-pro-max`, `impeccable`, `review-animations`, `mobile-native` (for reviewers); `receiving-code-review`, `systematic-debugging`, `verification-before-completion` (Step 4). Also note whether you have a `memory` tool (Step 3). Don't read the reviewers' helpers yourself.
 8. **Code graph (graphify).** Always run this check: `test -f graphify-out/graph.json` (PowerShell: `Test-Path graphify-out/graph.json`) in the repo root. Only if it's there, run `graphify --help` (else `python -m graphify --help`); if one works, note the working command, the graph path and its last-modified time. Never build a graph or call an LLM through graphify. If the graph is older than the newest change in scope, it may be stale; reviewers still use it, but only as a pointer.
+9. **Spend profile.** Look for a line `code-review-team profile: economy|balanced|max` in the rules files you were given (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, Cursor rules, and their global versions); `code-review-team-init` writes it. None found: **balanced**. The request overrides it for this run: "max review", "at max", "best models" → max; "cheap", "quick", "economy" → economy.
 
 ## Step 1: Tool pass
 
@@ -40,14 +41,27 @@ Before the reviewers start, collect hard evidence. Read [references/tools.md](re
 | 6 | Performance | [references/performance.md](references/performance.md) | expected load is "many users", **or** scope adds queries inside loops, reads with no limit (all rows, whole files), caches, background jobs/queues, or network/paid-API calls on a request path | mid | what breaks at scale, by reading code only: query per item, unbounded lists and caches, races, per-process state |
 | 7 | Data & deploy | [references/data-deploy.md](references/data-deploy.md) | scope touches migrations, schema/ORM models, Dockerfile/compose, CI workflows, IaC, deploy/cron/backup scripts, or env/config files and the code that reads new settings | mid | data loss in migrations, deploy-order breakage, missing settings that crash on deploy |
 
-**Model tier.** Start each reviewer on its tier when your subagent tool lets you choose: in Claude Code pass `model` (small = `haiku`, mid = `sonnet`, top = `opus`); in OpenCode use the agent `review-small`, `review-mid` or `review-top` if it exists in the config. Tiers are recommended, never required:
+**Model tier.** The table's tiers are the **balanced** profile. The profile from Step 0 shifts them:
+
+| Profile | Small reviewers (2, 4, 5) | Mid reviewers (3, 6, 7) | Hacker on security code (top) |
+|---|---|---|---|
+| economy | small | small | mid (other code: small) |
+| balanced | small | mid | top |
+| max | mid | top | max (other code: top) |
+
+Start each reviewer on its tier, first match wins:
+1. An agent named `review-<tier>` (`review-small`, `review-mid`, `review-top`, `review-max`) that your subagent tool can start, in any tool (OpenCode, Claude Code, Cursor, Copilot). No `review-max`: use `review-top` for max.
+2. Your subagent tool's own model option, e.g. Claude Code's `model`: small `haiku`, mid `sonnet`, top `opus`, max the Fable model if accepted, else `opus`.
+3. The default model.
+
+Tiers are recommended, never required:
 - No way to choose a model, or the user/project says not to use tiers ("no model tiers", "use my default model"): every reviewer runs on the default model.
 - A tier's model is refused or unavailable (access, policy, quota, unknown model): restart that reviewer once on the next tier down that worked this session, else on the default model. Never stop the review over it, and never ask the user.
 - Say it in one line under *Not checked* only when a reviewer ran below its tier ("Hacker ran on mid: top tier unavailable"), since its findings may be weaker.
 
 **Small-change mode** (Step 0): two subagents instead of one per reviewer, still never you alone:
 - **A** covers Hacker + Senior engineer, plus Performance and Data & deploy if they join; tier as the hacker's.
-- **B** covers Confused user + Tester, plus UI & accessibility if it joins; small tier.
+- **B** covers Confused user + Tester, plus UI & accessibility if it joins; the small reviewers' tier.
 Each reads every role file it covers and reports one section per role, so the report keeps one panel-notes subsection per role.
 
 **Who owns what** when roles overlap: Data & deploy owns data loss and broken deploys; Hacker owns security exposure (also in Dockerfiles, CI and IaC); Performance owns scale; Confused user owns single-request misuse.

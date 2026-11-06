@@ -1,8 +1,6 @@
 # Code Review Team
 
-*(formerly Banca de Revisão)*
-
-A skill for AI coding agents (OpenCode, Claude Code, and any agent that reads `SKILL.md`). It puts a **review squad** on your code, and their job is to try to reject it before you ship. Four reviewers always run, three more join when your change touches their area, and they all work in parallel. It's built for solo developers, who usually have no colleague to review their code and no CI to catch mistakes.
+Two skills for AI coding agents (OpenCode, Claude Code, Cursor, GitHub Copilot, and any agent that reads `SKILL.md`). `code-review-team` It puts a **review squad** on your code, and their job is to try to reject it before you ship. Four reviewers always run, three more join when your change touches their area, and they all work in parallel. It's built for solo developers, who usually have no colleague to review their code and no CI to catch mistakes. `code-review-team-init` sets up which model each kind of AI coding work runs on, so you spend tokens where they help.
 
 | Reviewer | Joins | Looks for |
 |---|---|---|
@@ -23,21 +21,28 @@ A skill for AI coding agents (OpenCode, Claude Code, and any agent that reads `S
 - **Hotspots.** When a security question depends on what you meant ("is this route public on purpose?"), the panel asks you instead of guessing.
 - **Handles AI-written code.** It checks for packages that don't exist, stub functions, tests that mock what they test, and edits outside what you asked for.
 - **One ranked fix list.** Each fix has `file:line`, a concrete failing case, and the smallest fix. Ask it to fix things and it fixes them one by one, then runs the whole panel again.
-- **Answers in your language.** English by default; Portuguese and others work too.
+- **Replies in the language you write in.**
 
 ## Install
 
-Clone this folder into your agent's skills folder:
+With the [skills CLI](https://github.com/vercel-labs/skills) (picks your agents for you):
 
 ```bash
-# OpenCode
-git clone https://github.com/CaioMBA/code-review-team ~/.config/opencode/skills/code-review-team
-
-# Claude Code
-git clone https://github.com/CaioMBA/code-review-team ~/.claude/skills/code-review-team
+npx skills add CaioMBA/code-review-team                         # both skills
+npx skills add CaioMBA/code-review-team -s code-review-team      # only the review panel
+npx skills add CaioMBA/code-review-team -s code-review-team-init # only the model setup
 ```
 
-Or use the [skills CLI](https://github.com/vercel-labs/skills): `npx skills add CaioMBA/code-review-team`
+By hand: clone the repo anywhere and copy (or link) `skills/code-review-team` and `skills/code-review-team-init` into your agent's skills folder:
+
+| Agent | Global skills folder | Project skills folder |
+|---|---|---|
+| OpenCode | `~/.config/opencode/skills/` | `.opencode/skills/` |
+| Claude Code | `~/.claude/skills/` | `.claude/skills/` |
+| Cursor | `~/.cursor/skills/` | `.cursor/skills/` |
+| GitHub Copilot | `~/.copilot/skills/` | `.github/skills/` |
+
+**Moving from an older install:** older versions had `SKILL.md` at the repo root and were installed with `git clone` straight into the skills folder. That layout no longer works: delete the old `code-review-team` folder and install again as above.
 
 ## Use
 
@@ -47,27 +52,37 @@ Just ask in your own words:
 - "review my feature/login branch before I merge"
 - "Cursor wrote this, can I deploy it?"
 - "fix 1 and 3 and review again"
-- "revisa antes de eu subir" / "chama a banca"
 
 By default it reviews everything that would ship: uncommitted changes plus your branch compared with the main branch. It also works on files you name or code you paste into the chat. To review only the new lines, say so.
 
-## Cost and model tiers
+## Cost, model tiers and profiles
 
 Each reviewer runs on a model tier that fits its job: the confused user, tester and UI reviewers on a **small** model, the senior, performance and data & deploy reviewers on a **mid** model, and the hacker on a **top** model when the change touches auth, tokens, payments, crypto or secrets (mid otherwise). The lead runs on your own session's model and re-checks every finding. Changes of 30 lines or fewer get two combined reviewers instead of four to seven; ask for "the full panel" to override.
 
-In Claude Code the tiers map to `haiku`, `sonnet` and `opus` automatically. In OpenCode, add three agents to `opencode.json` to enable them (otherwise every reviewer uses your default model):
+Pick how much to spend with a **profile**:
 
-```json
-"agent": {
-  "review-small": { "mode": "subagent", "description": "code-review-team small-tier reviewer", "model": "anthropic/claude-haiku-4-5" },
-  "review-mid":   { "mode": "subagent", "description": "code-review-team mid-tier reviewer", "model": "anthropic/claude-sonnet-4-5" },
-  "review-top":   { "mode": "subagent", "description": "code-review-team top-tier reviewer", "model": "anthropic/claude-opus-4-5" }
-}
-```
+| Profile | Confused user, tester, UI | Senior, performance, data & deploy | Hacker on security code |
+|---|---|---|---|
+| Economy | small | small | mid |
+| **Balanced** (default) | small | mid | top |
+| Max | mid | top | max (Claude Fable or GPT-6 Astra, if your plan has them) |
 
-Use any provider's models; pick a small, a mid and a top one.
+Max models cost about 2.5× a top model per token, so Max is for people with big plans who want the strongest review. Set the profile once with `code-review-team-init`, or per request: "max review", "quick cheap review".
+
+The panel starts reviewers through agents named `review-small`, `review-mid`, `review-top` and `review-max` when your agent has them; `code-review-team-init` creates them for you. Without them it uses the agent's own model option (Claude Code: `haiku`, `sonnet`, `opus`), else your default model.
 
 Tiers are recommended, not required. If your company only gives you some models, the panel still runs: a reviewer whose model is refused or unavailable is restarted once on the next tier down, else on your default model, and the report says which reviewers ran below their tier. To skip tiers entirely, say "use my default model" (or put that in your `AGENTS.md`/`CLAUDE.md`).
+
+## Set up models (init)
+
+Ask your agent to "set up my models" (or "save tokens", "init code review team"). `code-review-team-init`:
+
+1. finds which of OpenCode, Claude Code, Cursor and Copilot you use, and which models you can access;
+2. asks for a profile (Economy, Balanced or Max);
+3. proposes a model per kind of work: a small model for searching and reading files, mid for side tasks, top (or max) for planning, plus the `review-*` agents;
+4. shows every change before writing, and writes only after you say yes, backing up each file first.
+
+It sets things up globally by default; say "init this project" for project files your team can commit. It only changes model and agent settings plus one marked block in your rules file (`AGENTS.md`, `CLAUDE.md`, Copilot instructions, Cursor rules) that tells the main agent to hand file searches to the cheap agent. It never touches API keys, providers or permissions. Run it again any time; nothing changes if everything is already set.
 
 ## Works better with (optional)
 
@@ -106,28 +121,19 @@ Pick only the ones you want. Some of these also ship as Claude Code plugins or O
 ## Layout
 
 ```
-SKILL.md                      the coordinator: scope, roles that join, tool pass, panel, gate, report, fix loop
-references/hacker.md          one checklist per reviewer, each loaded only by that reviewer
-references/confused-user.md
-references/senior.md
-references/tester.md
-references/ui.md              joins on front-end changes
-references/performance.md     joins on many users or queries/loops/caches/jobs/API calls
-references/data-deploy.md     joins on migrations, Docker, CI, config
-references/tools.md           lint/type/test/audit commands for each stack
-references/report-template.md report structure and label translations
-evals/                        test cases with planted bugs (claude plugin eval format)
+skills/code-review-team/SKILL.md          the coordinator: scope, profile, roles that join, tool pass, panel, gate, report, fix loop
+skills/code-review-team/references/       one checklist per reviewer (hacker, confused-user, senior, tester, ui,
+                                          performance, data-deploy), tools.md and report-template.md
+skills/code-review-team-init/SKILL.md     model setup: detect tools and models, profile, propose, write with backups
+skills/code-review-team-init/references/  one file per agent: opencode, claude-code, cursor, copilot
+evals/                                    test cases with planted bugs (not installed with the skills)
 ```
 
 ## Skill tests
 
-`evals/` has 10 cases with planted bugs, 4 in Portuguese and 6 in English: a cart branch with a coupon, a pasted signup form, fixing and reviewing again, an AI-written password-reset branch, a tiny change that duplicates an existing helper, a clean change in a repo that already had a leaked key (the verdict should still be APPROVED), a newsletter form with accessibility bugs, an order list that breaks at the stated load, a migration that drops data, and an integration case that checks the optional skills are used without changing the report format. In the latest round (Claude Code, 1 run per case, graded by independent agents), 5 cases passed all 44 grader checks: 4 with no other skills reachable and the integration case (the hacker read security-audit on opus, the senior read ponytail-review). With model tiers, a review cost $0.50 (small change) to $1.17, down from $1.10-2.40 when every reviewer ran on Sonnet. Run them with `claude plugin eval . --scaffold --allow-tools Write Edit Bash`. On Windows that command refuses to run Bash (there's no sandbox backend), so run each case with `claude -p` in a scaffolded folder instead, with Git bash first on `PATH`.
+`evals/` has 10 cases with planted bugs: a cart branch with a coupon, a pasted signup form, fixing and reviewing again, an AI-written password-reset branch, a tiny change that duplicates an existing helper, a clean change in a repo that already had a leaked key (the verdict should still be APPROVED), a newsletter form with accessibility bugs, an order list that breaks at the stated load, a migration that drops data, and an integration case that checks the optional skills are used without changing the report format. In the latest round (Claude Code, 1 run per case, graded by independent agents), 5 cases passed all 44 grader checks: 4 with no other skills reachable and the integration case (the hacker read security-audit on opus, the senior read ponytail-review). With model tiers, a review cost $0.50 (small change) to $1.17, down from $1.10-2.40 when every reviewer ran on Sonnet. Run them with `claude plugin eval . --scaffold --allow-tools Write Edit Bash`. On Windows that command refuses to run Bash (there's no sandbox backend), so run each case with `claude -p` in a scaffolded folder instead, with Git bash first on `PATH`.
 
 > The panel lowers the risk, but it doesn't guarantee bug-free code. Before you ship, commit and check the changes.
-
-## Português
-
-A skill responde no idioma em que você escreve. É só pedir: "tá pronto pra eu dar push?", "revisa esse código antes de eu subir", "corrige o que a banca achou e revisa de novo". O veredito sai como **APROVADO PRA SUBIR** ou **REPROVADO**.
 
 ## Credits
 

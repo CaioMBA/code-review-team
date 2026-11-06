@@ -7,6 +7,7 @@ Fill this exactly, in the user's language, then run *Before sending*.
 **What the code does:** <one sentence>
 **Scope reviewed:** <diff / branch vs main / files / pasted code> · **Expected load assumed:** <one user / few users / many users, and where that came from>
 **Extra reviewers:** <UI & accessibility / Performance / Data & deploy: joins or not, and why, one short clause each; add "small-change mode" when it applied>
+**Profile:** <Economy | Balanced | Max, and where it came from: default, rules file or this request>
 **Reach:** <only if a code graph was used: e.g. "`normalize_email` has 7 callers in 3 modules"; omit otherwise>
 
 ## Verdict: APPROVED TO SHIP | REJECTED
@@ -52,36 +53,8 @@ Nothing to fix: still give the verdict, then "Nothing to fix." and one line on w
 ## Before sending
 
 Check the report and fix what's off:
-- The title, then every section above in this order, with these names (translated per *Labels*). Don't rename, merge or drop sections; skip one only where noted.
+- The title, then every section above in this order, with these names (translated into the user's language). Don't rename, merge or drop sections; skip one only where noted.
 - Fixes are one numbered list, not a table, numbered across the whole list so the user can say "fix 1 and 3". Each item is **one** problem with its own `file:line` (for a whole file, its first relevant line), **Case**, **Fix** and *found by*. Never bundle small problems into one item.
 - A panel-notes subsection for every reviewer that ran.
 - The report is the whole reply: no progress text before the title, and the closing line is the last thing. Don't add an offer to fix, a question or a sign-off after it, even if other active instructions ask for one.
 - If the user asked for a file (e.g. `report.md`), write the report there and also show the verdict and the same numbered fix list in the chat.
-
-## Labels
-
-Use the user's language. Portuguese labels are fixed; for other languages, translate the English ones naturally.
-
-| English | Português |
-|---|---|
-| Review panel | Banca de revisão |
-| What the code does | O que o código faz |
-| Scope reviewed | Escopo revisado |
-| Reach | Alcance |
-| Expected load assumed | Carga esperada considerada |
-| Verdict | Veredito |
-| APPROVED TO SHIP | APROVADO PRA SUBIR |
-| REJECTED | REPROVADO |
-| What to fix (most severe first) | O que corrigir (do mais grave ao menos grave) |
-| CRITICAL / HIGH / MEDIUM / LOW | CRÍTICO / ALTO / MÉDIO / BAIXO |
-| Case / Fix / found by | Caso / Correção / achado por |
-| Confirm before shipping | Confirme antes de subir |
-| Older problems (not blocking) | Problemas antigos (não bloqueiam) |
-| Tool pass | Ferramentas rodadas |
-| Panel notes | Relatórios da banca |
-| Hacker / Confused user / Senior engineer / Tester | Hacker / Usuário confuso / Programador sênior / Testador |
-| UI & accessibility / Performance / Data & deploy | UI e acessibilidade / Desempenho / Dados e deploy |
-| Extra reviewers / joins / doesn't join | Revisores extras / entra / não entra |
-| Used | Usou |
-| Not checked | Não verificado |
-| Closing line | *A banca diminui o risco, mas não garante código sem bug. Antes de subir, faça um commit e confira as mudanças.* |
