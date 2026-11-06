@@ -7,7 +7,7 @@ description: Sets up which AI model each kind of coding work runs on, a small mo
 
 Most AI coding tokens go to work a small model does just as well: finding files, reading code, writing titles. This skill points that work at a small model, keeps planning and hard reviews on strong ones, and creates the `review-*` agents the `code-review-team` panel looks for. The review works without this skill; init only makes it cheaper or stronger.
 
-**Never touch** API keys, providers, permissions or MCP servers. Change only model and agent settings, agent files, and one marked block in a rules file. **Never write** before showing the change and getting a yes.
+**Never touch** API keys, providers, permissions or MCP servers. Never read auth or credential files, and never connect to a running tool's server or port to learn models: use only the list commands in the reference files, and ask the user when they fail. Change only model and agent settings, agent files, and one marked block in a rules file. **Never write** before showing the change and getting a yes.
 
 Per-tool paths, file formats, examples and gotchas: [references/opencode.md](references/opencode.md), [references/claude-code.md](references/claude-code.md), [references/cursor.md](references/cursor.md), [references/copilot.md](references/copilot.md). Read the file for each tool you configure before proposing anything for it.
 
@@ -23,7 +23,7 @@ List what the user can really use, per tool (commands in each reference file): `
 
 - **small**: the cheapest capable model (Haiku class). **mid**: Sonnet class. **top**: Opus class.
 - **max**: the strongest model available: Claude Fable (e.g. `claude-fable-5-1`) or GPT-6 Astra (`gpt-6-astra`). Neither available: max = top. Say so before applying.
-- Prefer one provider per tool, the one the user's main model already uses.
+- Prefer one provider per tool, the one the user's main model already uses. If the list has no models from that provider, don't fill tiers from other providers' models: ask the user which models to use.
 
 ## Step 3: Ask the profile
 
