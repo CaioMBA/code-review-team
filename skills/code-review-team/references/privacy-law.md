@@ -64,5 +64,5 @@ For each finding:
 [SEVERITY] path:line — <problem>  (new|existing)
 Case: <whose data or which rule, what happens, who sees it or what the result is, concretely>
 Fix: <smallest fix or short diff>
-Law: <article, only when a law skill supports it>
+Law: <article, only one a law skill you read states; never from memory - omit the line otherwise>
 ```
