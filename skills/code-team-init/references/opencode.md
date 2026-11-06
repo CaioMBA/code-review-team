@@ -85,9 +85,9 @@ No `permission` block: reviewers keep full tools. `description` is required.
 Append to `~/.config/opencode/AGENTS.md` (OpenCode needs no routing lines; its built-ins are re-modelled):
 
 ```
-<!-- code-review-team-init:start -->
+<!-- code-team-init:start -->
 code-review-team profile: balanced
-<!-- code-review-team-init:end -->
+<!-- code-team-init:end -->
 ```
 
 ## Gotchas

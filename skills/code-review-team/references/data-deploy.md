@@ -20,6 +20,7 @@ You own data loss and broken deploys. Security exposure (also in Dockerfiles, CI
 
 Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
 
+- **migration:** read its `SKILL.md` and use its checklist on every migration and backfill in scope: a rollback path, expand → migrate → verify → contract, safe while old and new versions run side by side, retries safe to repeat, partial failure visible. Each gap is a finding at your own severity.
 - **security-audit:** read `DATA-ISOLATION-AND-LIFECYCLE.md` (deletion, retention, restore, migrations) and `CLOUD-AND-DEPLOYMENT.md` from that skill's folder, and use only their non-security checks. Guidance mode only: never its full audit, never its output folder.
 
 Rules: read-only, never run anything that writes, installs, downloads or waits for a human. The helper adds checks; your checklist above still runs. Your output format and severity win: map its severities onto CRITICAL/HIGH/MEDIUM/LOW and drop its verdicts and buckets.

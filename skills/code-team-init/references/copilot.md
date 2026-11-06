@@ -71,11 +71,11 @@ No `tools` line: all tools. `description` is required.
 Append to `~/.copilot/copilot-instructions.md`:
 
 ```
-<!-- code-review-team-init:start -->
+<!-- code-team-init:start -->
 - Delegate file searches and code reading to the `search` agent (small model).
 - Delegate multi-step side tasks to the `general` agent.
 code-review-team profile: balanced
-<!-- code-review-team-init:end -->
+<!-- code-team-init:end -->
 ```
 
 ## Gotchas

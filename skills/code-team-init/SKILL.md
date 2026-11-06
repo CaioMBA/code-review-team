@@ -1,6 +1,6 @@
 ---
-name: code-review-team-init
-description: Sets up which AI model each kind of coding work runs on, a small model for searching and reading files, a mid model for side tasks and a top model for planning, to cut token spend on all AI coding, not only reviews. Works in OpenCode, Claude Code, Cursor and GitHub Copilot, globally by default or for one project. Offers three spend profiles (Economy, Balanced, Max) and creates the review-small, review-mid and review-top agents the code-review-team skill uses. Use for "set up my models", "save tokens", "configure agents", "configure models", "init code review team", "use max models" or "init this project". Shows every change and asks before writing anything.
+name: code-team-init
+description: Sets up which AI model each kind of coding work runs on, a small model for searching and reading files, a mid model for side tasks and a top model for planning, to cut token spend on all AI coding, not only reviews. Works in OpenCode, Claude Code, Cursor and GitHub Copilot, globally by default or for one project. Offers three spend profiles (Economy, Balanced, Max) and creates the review-small, review-mid and review-top agents the code-review-team skill uses. Use for "set up my models", "save tokens", "configure agents", "configure models", "init code team", "use max models" or "init this project". Shows every change and asks before writing anything.
 ---
 
 # Code Review Team init: the right model for each job
@@ -59,6 +59,11 @@ Fill this table through the profile and the Step 2 models, and show it:
 - `search` agents are read-only where the tool supports it. `review-*` agents get full tools (the tester writes test files) and this body: "You are a reviewer on a code review panel. Follow the prompt you are given exactly."
 - The main coding model is shown but never changed unless the user asks.
 
+**If installed** (optional; look in the same skill and agent folders as Step 1, skip silently when missing):
+- **`cavecrew` agents** (an agent file named `cavecrew-investigator` exists, from the caveman plugin): route searches there instead of creating `search`, and set its model to the small tier only where the tool allows a model per agent. Its answers are compressed `path:line` lists, so each search costs the main session less.
+- **`caveman-explore` skill**: when you create a `search` agent, make its body "Read and follow the `caveman-explore` skill at <path>." instead of the default, so it returns only `path:line` lists. Keep it read-only.
+- **`caveman-stats` / `caveman-learn`**: in Step 7, suggest measuring token use with them before and after this setup. Never claim a saving you haven't measured.
+
 ## Step 5: Show the change
 
 For every file, a short before/after: the JSON keys added or changed, each new agent file in full, the marked block. Then ask once per scope:
@@ -71,14 +76,14 @@ For every file, a short before/after: the JSON keys added or changed, each new a
 1. **Back up** each existing file before its first change today: copy to `<file>.bak-<YYYYMMDD>`. If today's backup exists, keep it; don't overwrite.
 2. **JSON/JSONC**: edit in place. Add or change only the agent/model keys shown. Keep comments, key order, formatting and every other key. Re-read the file afterwards and check it still parses (JSONC: comments allowed).
 3. **Agent files**: create only if absent. If one exists and differs, show the diff and ask: replace, keep, or skip.
-4. **Marked block**: in the tool's rules file (path in its reference), keep exactly one block. If the markers exist, replace what is between them; else append the block at the end. Never add a second block. It holds only routing lines for agents this run created, plus the profile line:
+4. **Marked block**: in the tool's rules file (path in its reference), keep exactly one block. If the markers exist, replace what is between them; else append the block at the end. Never add a second block. A block with the old markers `<!-- code-review-team-init:start/end -->` (this skill's former name) counts as the same block: replace it, markers included. It holds only routing lines for agents this run created, plus the profile line:
 
 ```
-<!-- code-review-team-init:start -->
+<!-- code-team-init:start -->
 - Delegate file searches and code reading to the `search` agent (small model).
 - Delegate multi-step side tasks to the `general` agent.
 code-review-team profile: balanced
-<!-- code-review-team-init:end -->
+<!-- code-team-init:end -->
 ```
 
 Write the profile line exactly as `code-review-team profile: <economy|balanced|max>`, lowercase; the review skill reads it.

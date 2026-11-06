@@ -7,7 +7,7 @@ Source: https://cursor.com/docs/subagents, https://cursor.com/docs/context/rules
 | What | Global | Project ("init this project") |
 |---|---|---|
 | Agent files | `~/.cursor/agents/<name>.md` | `.cursor/agents/<name>.md` |
-| Rules (marked block) | User Rules in Cursor Settings (Customize → Rules); **no documented file**, so print the block for the user to paste | `.cursor/rules/code-review-team-init.mdc` |
+| Rules (marked block) | User Rules in Cursor Settings (Customize → Rules); **no documented file**, so print the block for the user to paste | `.cursor/rules/code-team-init.mdc` |
 
 Never write Cursor agents to `~/.claude/agents` or `.claude/agents`: Cursor reads them, but Claude Code would load them too.
 
@@ -54,18 +54,18 @@ No `readonly`: reviewers keep full tools.
 
 ## Example: marked block
 
-Project file `.cursor/rules/code-review-team-init.mdc` (whole file when init creates it; if it exists, replace only between the markers):
+Project file `.cursor/rules/code-team-init.mdc` (whole file when init creates it; if it exists, replace only between the markers):
 
 ```
 ---
-description: code-review-team-init model routing
+description: code-team-init model routing
 alwaysApply: true
 ---
 
-<!-- code-review-team-init:start -->
+<!-- code-team-init:start -->
 - Delegate file searches and code reading to the `search` agent (small model).
 code-review-team profile: balanced
-<!-- code-review-team-init:end -->
+<!-- code-team-init:end -->
 ```
 
 Global: print the same block (without the frontmatter) and ask the user to paste it into Cursor Settings → Rules → User Rules. Re-runs: ask them to replace the old block, not add a second one.

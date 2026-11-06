@@ -33,9 +33,9 @@ If `CLAUDE_CONFIG_DIR` is set, use it instead of `~/.claude`.
 Append to `~/.claude/CLAUDE.md`:
 
 ```
-<!-- code-review-team-init:start -->
+<!-- code-team-init:start -->
 code-review-team profile: balanced
-<!-- code-review-team-init:end -->
+<!-- code-team-init:end -->
 ```
 
 ## Example: settings merge (`opusplan`, opt-in only)
