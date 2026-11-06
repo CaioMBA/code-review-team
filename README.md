@@ -1,6 +1,6 @@
 # Code Review Team
 
-Two skills for AI coding agents (OpenCode, Claude Code, Cursor, GitHub Copilot, and any agent that reads `SKILL.md`). `code-review-team` It puts a **review squad** on your code, and their job is to try to reject it before you ship. Four reviewers always run, three more join when your change touches their area, and they all work in parallel. It's built for solo developers, who usually have no colleague to review their code and no CI to catch mistakes. `code-team-init` sets up which model each kind of AI coding work runs on, so you spend tokens where they help.
+Two skills for AI coding agents (OpenCode, Claude Code, Cursor, GitHub Copilot, and any agent that reads `SKILL.md`). `code-review-team` It puts a **review squad** on your code, and their job is to try to reject it before you ship. Four reviewers always run, four more join when your change touches their area, and they all work in parallel. It's built for solo developers, who usually have no colleague to review their code and no CI to catch mistakes. `code-team-init` sets up which model each kind of AI coding work runs on, so you spend tokens where they help.
 
 | Reviewer | Joins | Looks for |
 |---|---|---|
@@ -11,6 +11,7 @@ Two skills for AI coding agents (OpenCode, Claude Code, Cursor, GitHub Copilot, 
 | ♿ UI & accessibility | front-end files change | flows keyboard or screen-reader users can't finish, missing labels, contrast, phone layouts |
 | 📈 Performance | many users, or the change adds queries, loops over data, caches, jobs or API calls | what breaks at scale, from reading the code (it never sends traffic) |
 | 🗄️ Data & deploy | migrations, Docker, CI or config change | migrations that lose data, deploys that crash, settings with no default |
+| ⚖️ Privacy & law | personal data, or code that computes a legal rule (tax, payroll, refunds, cancellation) | personal data in logs or analytics, tracking before consent, deletion that doesn't delete, data sent to vendors, wrong legal calculations (not legal advice) |
 | 👔 Lead | always | checks every finding and gives **one** verdict: **APPROVED TO SHIP** or **REJECTED** |
 
 **What you get:**
@@ -57,7 +58,7 @@ By default it reviews everything that would ship: uncommitted changes plus your 
 
 ## Cost, model tiers and profiles
 
-Each reviewer runs on a model tier that fits its job: the confused user, tester and UI reviewers on a **small** model, the senior, performance and data & deploy reviewers on a **mid** model, and the hacker on a **top** model when the change touches auth, tokens, payments, crypto or secrets (mid otherwise). The lead runs on your own session's model and re-checks every finding. Changes of 30 lines or fewer get two combined reviewers instead of four to seven; ask for "the full panel" to override.
+Each reviewer runs on a model tier that fits its job: the confused user, tester and UI reviewers on a **small** model, the senior, performance, data & deploy and privacy & law reviewers on a **mid** model, and the hacker on a **top** model when the change touches auth, tokens, payments, crypto or secrets (mid otherwise). The lead runs on your own session's model and re-checks every finding. Changes of 30 lines or fewer get two combined reviewers instead of four to eight; ask for "the full panel" to override.
 
 Pick how much to spend with a **profile**:
 
@@ -102,6 +103,11 @@ The squad is complete on its own. If any of these skills are installed next to i
 | `migration` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | Data & deploy | rollback path, expand/migrate/verify/contract, mixed-version safety, retries safe to repeat |
 | `surgical-patch`, `safe-refactor`, `investigate-first`, `verify-and-stop` | [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | fix loop | the narrowest fix with a regression test, behavior-preserving refactors, evidence before re-fixing, and a pass/fail/unavailable/blocked final check |
 | `understand-diff` (Understand-Anything plugin) | [Egonex-AI/Understand-Anything](https://github.com/Egonex-AI/Understand-Anything) | Senior, Lead | affected components and callers from your knowledge graph, for the *Reach* line. Used only if you already built one (`.ua/knowledge-graph.json`); the panel never builds or updates it |
+| `test-driven-development` | [obra/superpowers](https://github.com/obra/superpowers) | Tester | shows each new test can fail, so it isn't a test that always passes |
+| `write-swift`, `apple-design`, `animate-expo`, `ask-sonner` | [emilkowalski/skill](https://github.com/emilkowalski/skill) | Senior, Performance, UI | only for Swift, Apple-platform UI, React Native/Expo motion, or Sonner toasts: data races, retain cycles, Reduce Motion, Dynamic Type, toasts that never show |
+| `lgpd-*` (lgpd-skills plugin) | [goul4rt/lgpd-skills](https://github.com/goul4rt/lgpd-skills) | Privacy & law | Brazil's LGPD and ECA Digital: consent, logs, retention, data-subject rights, vendors, minors, with article citations. Only its code checks; never its audits or the `.lgpd/` documents |
+| `brasil-legal-skills` | [AlissonSantos1/brasil-legal-skills](https://github.com/AlissonSantos1/brasil-legal-skills) | Privacy & law | Brazilian law: LGPD and Marco Civil, consumer rights at checkout (7-day withdrawal), and its offline tax and payroll calculators to check code that computes Simples Nacional, INSS, IRPF or severance |
+| legal-ai-skills plugin | [rohasnagpal/legal-ai-skills](https://github.com/rohasnagpal/legal-ai-skills) | Privacy & law | UK GDPR, US state privacy laws, India's DPDP Act, data sent abroad, e-commerce consumer rules, and whether your privacy notice covers what the code collects. Only 7 of its checkers; never its lawyer agents, workflows or MCP servers |
 | `ast-grep` (a CLI, not a skill) | [ast-grep/ast-grep](https://github.com/ast-grep/ast-grep) | Senior | structural search for duplicates and callers |
 
 Install all the optional skills with the [skills CLI](https://github.com/vercel-labs/skills) (add `-g` for your user folder instead of the project, and `-a claude-code`, `-a opencode`, ... to pick agents):
@@ -112,8 +118,8 @@ npx skills add DietrichGebert/ponytail -s ponytail-review -s ponytail-debt
 npx skills add microsoft/playwright-cli -s playwright-cli
 npx skills add nextlevelbuilder/ui-ux-pro-max-skill -s ui-ux-pro-max
 npx skills add pbakaus/impeccable -s impeccable
-npx skills add emilkowalski/skill -s review-animations -s mobile-native
-npx skills add obra/superpowers -s receiving-code-review -s systematic-debugging -s verification-before-completion
+npx skills add emilkowalski/skill -s review-animations -s mobile-native -s write-swift -s apple-design -s animate-expo -s ask-sonner
+npx skills add obra/superpowers -s receiving-code-review -s systematic-debugging -s verification-before-completion -s test-driven-development
 npx skills add JuliusBrussee/caveman -s migration -s surgical-patch -s safe-refactor -s investigate-first -s verify-and-stop
 ```
 
@@ -121,6 +127,12 @@ For graphify (a Python CLI, needs Python 3.10+): `uv tool install graphifyy` (or
 
 For Understand-Anything: in Claude Code, `/plugin marketplace add Egonex-AI/Understand-Anything` then `/plugin install understand-anything`; for other agents, its README has a one-line installer. Build the graph with `/understand` in your project.
 
+For the law skills:
+- **lgpd-skills:** in Claude Code, `/plugin marketplace add goul4rt/lgpd-skills` then `/plugin install lgpd-skills@lgpd-skills`; in OpenCode, add `"lgpd-skills@git+https://github.com/goul4rt/lgpd-skills.git"` to the `plugin` array of `opencode.json`.
+- **legal-ai-skills:** in Claude Code, `/plugin marketplace add rohasnagpal/legal-ai-skills` then `/plugin install legal-ai-skills@rohas-legal`.
+- **brasil-legal-skills:** `git clone https://github.com/AlissonSantos1/brasil-legal-skills.git ~/.claude/skills/brasil-legal-skills` (or your agent's skills folder).
+
+The Privacy & law reviewer works without any of them, with a checklist that fits GDPR, LGPD and CCPA alike; with one installed, it applies that law and cites the article. Its notes are not legal advice.
 
 Pick only the ones you want. Some of these also ship as Claude Code plugins or OpenCode plugins (superpowers, ponytail); either way works, the panel finds them by name. `playwright-cli` also needs Playwright (its `SKILL.md` has an Installation section), and `ast-grep` is installed as a normal tool (e.g. `npm i -g @ast-grep/cli`).
 

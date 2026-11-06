@@ -6,7 +6,7 @@ Fill this exactly, in the user's language, then run *Before sending*.
 # Review panel: <project or branch>
 **What the code does:** <one sentence>
 **Scope reviewed:** <diff / branch vs main / files / pasted code> · **Expected load assumed:** <one user / few users / many users, and where that came from>
-**Extra reviewers:** <UI & accessibility / Performance / Data & deploy: joins or not, and why, one short clause each; add "small-change mode" when it applied>
+**Extra reviewers:** <UI & accessibility / Performance / Data & deploy / Privacy & law: joins or not, and why, one short clause each; add "small-change mode" when it applied>
 **Profile:** <Economy | Balanced | Max, and where it came from: default, rules file or this request>
 **Reach:** <only if a code graph was used: e.g. "`normalize_email` has 7 callers in 3 modules"; omit otherwise>
 
@@ -17,6 +17,7 @@ Fill this exactly, in the user's language, then run *Before sending*.
 1. [CRITICAL] `path/file.ext:42` <problem in one line>
    - **Case:** <input or situation → wrong result>
    - **Fix:** <smallest fix, or a short diff>
+   - **Law:** <article, only when the Privacy & law reviewer cited one; omit otherwise>
    (found by: hacker, tester - name each reviewer)
 2. [HIGH] ...
 
@@ -41,9 +42,10 @@ Fill this exactly, in the user's language, then run *Before sending*.
 ### 5. UI & accessibility
 ### 6. Performance
 ### 7. Data & deploy
-<2-5 lines each: what it checked and its key findings; list any new test files created. Write sections 5-7 only for reviewers that joined. Add "Used: <helper skills>" only when a reviewer used one; never mention skills that weren't available.>
+### 8. Privacy & law
+<2-5 lines each: what it checked and its key findings; list any new test files created. Write sections 5-8 only for reviewers that joined. Add "Used: <helper skills>" only when a reviewer used one; never mention skills that weren't available.>
 
-**Not checked:** <what mattered and couldn't be checked, or "nothing">
+**Not checked:** <what mattered and couldn't be checked, or "nothing"; if Privacy & law joined, add "Privacy & law notes are not legal advice.">
 ```
 
 Close with: *The panel lowers the risk but doesn't guarantee bug-free code. Before shipping, commit and check the changes.*

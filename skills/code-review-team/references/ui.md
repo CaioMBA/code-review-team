@@ -26,6 +26,9 @@ Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says
 - **impeccable**: run its `audit` only if its binary is already present (no first-run download). Never its craft or edit paths.
 - **review-animations**: only when the scope changes motion code.
 - **mobile-native**: only for mobile-web layouts.
+- **apple-design**: only for SwiftUI/UIKit or other Apple-platform UI: read its "Reduced motion & accessibility", "Typography" and "Gesture design details" sections (Reduce Motion, Dynamic Type, gestures with no button alternative).
+- **animate-expo**: only for React Native/Expo UI that animates or uses gestures: read its "Hard Rules" and "Never Ship" sections (Reduce Motion ignored, gestures with no accessible alternative, motion that blocks input).
+- **ask-sonner**: only when the scope uses Sonner toasts: read its "Troubleshooting" section (toasts that never appear, appear twice, sit behind a modal or ignore dark mode) and check that important messages aren't shown only as a toast that disappears.
 
 ## Output
 

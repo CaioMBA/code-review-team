@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: privacy-signup-branch
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  The panel reviews the feature/signup branch against main and runs the tests (they pass). Privacy & law joins (new personal data: CPF, birth date, phone; analytics; account deletion). It flags that signup logs the email and CPF, that analytics.track sends email, CPF and birth date to a third-party endpoint on every signup with no consent check (and the privacy notice says data isn't shared), that delete_account removes the users row but leaves the profiles row with CPF, birth date and phone, and that marketing_opt_in defaults to True. Verdict REJECTED, with one fix list ranked by severity citing file:line. No existing file is changed and no .lgpd folder is created. The answer is in English.

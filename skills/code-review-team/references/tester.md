@@ -15,6 +15,14 @@ Prove what works and what doesn't. Evidence is a command and its output, never "
 4. **Write the missing tests**, for the most important uncovered cases, in **new files only** (e.g. `test_panel_<topic>.py`, `<topic>.panel.test.js`), placed where the test runner finds them. Never modify existing files. Run them and show the result. A new test that fails exposes a bug: report it as a finding with the test as evidence. If the project has no tests at all, these new tests are what the lead's gate uses.
 5. If no test runner can run (not installed, broken setup), say exactly why. Don't install anything.
 
+## If installed
+
+Optional. Use the ones in your prompt's "Helper skills" line, as the prompt says.
+
+- **test-driven-development** (superpowers): read its "Verify RED - Watch It Fail" and "Good Tests" sections. For each new test you write that passes, show it can fail: break the behavior it covers in a copy of the code in a temp folder outside the repo, deleted afterwards (never the real file), or point to the exact input that would make it fail; a test you can't make fail is weak, say so. Skip its rule to write tests before code: you review finished code.
+
+Rules: the helper adds checks; your steps above still run. Your output format and severity win: drop its rules about how to develop.
+
 ## Output
 
 ```
