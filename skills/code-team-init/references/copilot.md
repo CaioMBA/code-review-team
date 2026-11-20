@@ -52,7 +52,7 @@ Do the task you are given, end to end, and return a short summary of what you di
 
 ## Example: review agent
 
-`~/.copilot/agents/review-mid.agent.md` (same for `review-small`, `review-top`, and `review-max` under Max only, each with its own tier's model):
+`~/.copilot/agents/review-mid.agent.md` (same for `review-small`, `review-top`, and, under Max only, `review-max`, `review-visual` and `review-security` (the last two when Step 2 picked a strength model), each with its own model):
 
 ```markdown
 ---

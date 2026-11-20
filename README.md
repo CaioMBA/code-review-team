@@ -12,6 +12,7 @@ Two skills for AI coding agents (OpenCode, Claude Code, Cursor, GitHub Copilot, 
 | 📈 Performance | many users, or the change adds queries, loops over data, caches, jobs or API calls | what breaks at scale, from reading the code (it never sends traffic) |
 | 🗄️ Data & deploy | migrations, Docker, CI or config change | migrations that lose data, deploys that crash, settings with no default |
 | ⚖️ Privacy & law | personal data, or code that computes a legal rule (tax, payroll, refunds, cancellation) | personal data in logs or analytics, tracking before consent, deletion that doesn't delete, data sent to vendors, wrong legal calculations (not legal advice) |
+| 🧶 Structure | changes over ~150 lines, AI-written code, or code with clear AI-code signs | copies of a rule that must change together, needless coupling, wrappers and config nobody needs, one-off special cases, unread AI code (narrating comments, `_v2` names, emoji logs) |
 | 👔 Lead | always | checks every finding and gives **one** verdict: **APPROVED TO SHIP** or **REJECTED** |
 
 **What you get:**
@@ -58,7 +59,7 @@ By default it reviews everything that would ship: uncommitted changes plus your 
 
 ## Cost, model tiers and profiles
 
-Each reviewer runs on a model tier that fits its job: the confused user, tester and UI reviewers on a **small** model, the senior, performance, data & deploy and privacy & law reviewers on a **mid** model, and the hacker on a **top** model when the change touches auth, tokens, payments, crypto or secrets (mid otherwise). The lead runs on your own session's model and re-checks every finding. Changes of 30 lines or fewer get two combined reviewers instead of four to eight; ask for "the full panel" to override.
+Each reviewer runs on a model tier that fits its job: the confused user, tester and UI reviewers on a **small** model, the senior, performance, data & deploy, privacy & law and structure reviewers on a **mid** model, and the hacker on a **top** model when the change touches auth, tokens, payments, crypto or secrets (mid otherwise). The lead runs on your own session's model and re-checks every finding. Changes of 30 lines or fewer get two combined reviewers instead of four to nine; ask for "the full panel" to override.
 
 Pick how much to spend with a **profile**:
 
@@ -66,11 +67,13 @@ Pick how much to spend with a **profile**:
 |---|---|---|---|
 | Economy | small | small | mid |
 | **Balanced** (default) | small | mid | top |
-| Max | mid | top | max (Claude Fable or GPT-6 Astra, if your plan has them) |
+| Max | mid (UI: the best visual model you have, e.g. GPT Astra or Claude Fable) | top | the best security model you have: Claude Fable or GPT Astra, or GPT-6 Cyber if you have access and turn it on |
 
-Max models cost about 2.5× a top model per token, so Max is for people with big plans who want the strongest review. Set the profile once with `code-team-init`, or per request: "max review", "quick cheap review".
+Max models cost about 2× a top model per token, so Max is for people with big plans who want the strongest review. Under Max, two reviewers get a model picked for their job rather than their tier: the UI reviewer a visual model (GPT Astra leads web-design rankings, Claude Fable is close) and the hacker a security model.
 
-The panel starts reviewers through agents named `review-small`, `review-mid`, `review-top` and `review-max` when your agent has them; `code-team-init` creates them for you. Without them it uses the agent's own model option (Claude Code: `haiku`, `sonnet`, `opus`), else your default model.
+**Mixed vendors (default).** If you can use models from more than one vendor (say Claude and GPT), `code-team-init` spreads the review agents across them, since different model families miss different bugs. It only uses models you can really use: it checks each one with a one-line prompt before writing it, and the panel falls back to the next model if one is refused later (plan, credits, gated access). Say "one vendor" to turn it off. Set the profile once with `code-team-init`, or per request: "max review", "quick cheap review".
+
+The panel starts reviewers through agents named `review-small`, `review-mid`, `review-top` and `review-max` (plus `review-visual` and `review-security` under Max) when your agent has them; `code-team-init` creates them for you. Without them it uses the agent's own model option (Claude Code: `haiku`, `sonnet`, `opus`, `fable`), else your default model.
 
 Tiers are recommended, not required. If your company only gives you some models, the panel still runs: a reviewer whose model is refused or unavailable is restarted once on the next tier down, else on your default model, and the report says which reviewers ran below their tier. To skip tiers entirely, say "use my default model" (or put that in your `AGENTS.md`/`CLAUDE.md`).
 
@@ -108,6 +111,8 @@ The squad is complete on its own. If any of these skills are installed next to i
 | `lgpd-*` (lgpd-skills plugin) | [goul4rt/lgpd-skills](https://github.com/goul4rt/lgpd-skills) | Privacy & law | Brazil's LGPD and ECA Digital: consent, logs, retention, data-subject rights, vendors, minors, with article citations. Only its code checks; never its audits or the `.lgpd/` documents |
 | `brasil-legal-skills` | [AlissonSantos1/brasil-legal-skills](https://github.com/AlissonSantos1/brasil-legal-skills) | Privacy & law | Brazilian law: LGPD and Marco Civil, consumer rights at checkout (7-day withdrawal), and its offline tax and payroll calculators to check code that computes Simples Nacional, INSS, IRPF or severance |
 | legal-ai-skills plugin | [rohasnagpal/legal-ai-skills](https://github.com/rohasnagpal/legal-ai-skills) | Privacy & law | UK GDPR, US state privacy laws, India's DPDP Act, data sent abroad, e-commerce consumer rules, and whether your privacy notice covers what the code collects. Only 7 of its checkers; never its lawyer agents, workflows or MCP servers |
+| `untangle-codebase` | [caldoai/skills](https://github.com/caldoai/skills) | Structure | its checklist: hidden links, needless links, surplus and special cases. Only its "list every problem" part, never its refactor |
+| `humanize-code`, `code-simplification` | [c-kick/hnl-agent-skills](https://github.com/c-kick/hnl-agent-skills) | Structure, fix loop | its catalogue of AI-code signs and a read-only scanner on the changed files; behavior-preserving wording for structure fixes. Never its rewrite |
 | `ast-grep` (a CLI, not a skill) | [ast-grep/ast-grep](https://github.com/ast-grep/ast-grep) | Senior | structural search for duplicates and callers |
 
 Install all the optional skills with the [skills CLI](https://github.com/vercel-labs/skills) (add `-g` for your user folder instead of the project, and `-a claude-code`, `-a opencode`, ... to pick agents):
@@ -121,6 +126,8 @@ npx skills add pbakaus/impeccable -s impeccable
 npx skills add emilkowalski/skill -s review-animations -s mobile-native -s write-swift -s apple-design -s animate-expo -s ask-sonner
 npx skills add obra/superpowers -s receiving-code-review -s systematic-debugging -s verification-before-completion -s test-driven-development
 npx skills add JuliusBrussee/caveman -s migration -s surgical-patch -s safe-refactor -s investigate-first -s verify-and-stop
+npx skills add caldoai/skills -s untangle-codebase
+npx skills add c-kick/hnl-agent-skills -s humanize-code -s code-simplification
 ```
 
 For graphify (a Python CLI, needs Python 3.10+): `uv tool install graphifyy` (or `pipx install graphifyy`), then `graphify install`, then build the graph once in your project with `/graphify .` in your assistant, or `graphify extract . --code-only` for a code-only graph with no LLM. `graphify hook install` keeps it current on every commit.
@@ -149,7 +156,7 @@ evals/                                    test cases with planted bugs (not inst
 
 ## Skill tests
 
-`evals/` has 14 cases with planted bugs: a cart branch with a coupon, a pasted signup form, fixing and reviewing again, an AI-written password-reset branch, a tiny change that duplicates an existing helper, a clean change in a repo that already had a leaked key (the verdict should still be APPROVED), a newsletter form with accessibility bugs, an order list that breaks at the stated load, a migration that drops data, a signup branch that logs CPFs, sends them to a tracker and leaves them behind on deletion (Privacy & law), a payslip with a flat-rate INSS deduction, a UK subscription checkout with a pre-ticked box, phone-only cancellation and a hidden delivery fee, a Swift image cache with a data race, and an integration case that checks the optional skills are used without changing the report format. In the latest round (Claude Code, 1 run per case, graded by independent agents) all 10 cases found their planted bugs; the remaining misses were report-format slips and one fix-loop run that left `average([])` unfixed. The integration case read security-audit (hacker, on opus) and ponytail-review (senior) and followed the report template even with other plugins active. graphify runs used only `explain`/`path`/`query` and never touched the graph during a review. A review cost $0.65 (small change) to about $1.20, and $2-3 for a fix-and-review-again loop. Run them with `claude plugin eval . --scaffold --allow-tools Write Edit Bash`. On Windows that command refuses to run Bash (there's no sandbox backend), so run each case with `claude -p` in a scaffolded folder instead, with Git bash first on `PATH`.
+`evals/` has 15 cases with planted bugs: a cart branch with a coupon, a pasted signup form, fixing and reviewing again, an AI-written password-reset branch, a tiny change that duplicates an existing helper, a clean change in a repo that already had a leaked key (the verdict should still be APPROVED), a newsletter form with accessibility bugs, an order list that breaks at the stated load, a migration that drops data, a signup branch that logs CPFs, sends them to a tracker and leaves them behind on deletion (Privacy & law), a payslip with a flat-rate INSS deduction, a UK subscription checkout with a pre-ticked box, phone-only cancellation and a hidden delivery fee, a Swift image cache with a data race, an AI-written order flow whose discount rule is copied in two places that already disagree (Structure), and an integration case that checks the optional skills are used without changing the report format. In the latest round (Claude Code, 1 run per case, graded by independent agents) all 10 cases found their planted bugs; the remaining misses were report-format slips and one fix-loop run that left `average([])` unfixed. The integration case read security-audit (hacker, on opus) and ponytail-review (senior) and followed the report template even with other plugins active. graphify runs used only `explain`/`path`/`query` and never touched the graph during a review. A review cost $0.65 (small change) to about $1.20, and $2-3 for a fix-and-review-again loop. Run them with `claude plugin eval . --scaffold --allow-tools Write Edit Bash`. On Windows that command refuses to run Bash (there's no sandbox backend), so run each case with `claude -p` in a scaffolded folder instead, with Git bash first on `PATH`.
 
 > The panel lowers the risk, but it doesn't guarantee bug-free code. Before you ship, commit and check the changes.
 

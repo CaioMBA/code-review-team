@@ -24,7 +24,7 @@ If `CLAUDE_CONFIG_DIR` is set, use it instead of `~/.claude`.
 
 ## Model IDs and listing
 
-- Aliases: `haiku` (small), `sonnet` (mid), `opus` (top), `fable` (max; Fable 5.1), `opusplan` (Opus in plan mode, Sonnet otherwise), `default`. Full IDs such as `claude-opus-5-5` or `claude-fable-5-1` also work.
+- Aliases: `haiku` (small), `sonnet` (mid), `opus` (top), `fable` (max; Fable 5.2), `opusplan` (Opus in plan mode, Sonnet otherwise), `default`. Full IDs such as `claude-opus-5-5` or `claude-fable-5-2` also work.
 - No list command. The `/model` picker shows what the account can use; Fable may be marked "Requires usage credits". If unsure whether Fable is available, ask the user; if not, max = top (`opus`).
 - Agent frontmatter `model`: `haiku`, `sonnet`, `opus`, `fable`, a full ID, or `inherit`.
 

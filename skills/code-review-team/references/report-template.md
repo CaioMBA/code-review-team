@@ -6,7 +6,7 @@ Fill this exactly, in the user's language, then run *Before sending*.
 # Review panel: <project or branch>
 **What the code does:** <one sentence>
 **Scope reviewed:** <diff / branch vs main / files / pasted code> · **Expected load assumed:** <one user / few users / many users, and where that came from>
-**Extra reviewers:** <UI & accessibility / Performance / Data & deploy / Privacy & law: joins or not, and why, one short clause each; add "small-change mode" when it applied>
+**Extra reviewers:** <UI & accessibility / Performance / Data & deploy / Privacy & law / Structure: joins or not, and why, one short clause each; add "small-change mode" when it applied>
 **Profile:** <Economy | Balanced | Max, and where it came from: default, rules file or this request>
 **Reach:** <only if a code graph was used: e.g. "`normalize_email` has 7 callers in 3 modules"; omit otherwise>
 
@@ -43,7 +43,8 @@ Fill this exactly, in the user's language, then run *Before sending*.
 ### 6. Performance
 ### 7. Data & deploy
 ### 8. Privacy & law
-<2-5 lines each: what it checked and its key findings; list any new test files created. Write sections 5-8 only for reviewers that joined. Add "Used: <helper skills>" only when a reviewer used one; never mention skills that weren't available.>
+### 9. Structure
+<2-5 lines each: what it checked and its key findings; list any new test files created. Write sections 5-9 only for reviewers that joined. Add "Used: <helper skills>" only when a reviewer used one; never mention skills that weren't available.>
 
 **Not checked:** <what mattered and couldn't be checked, or "nothing"; if Privacy & law joined, add "Privacy & law notes are not legal advice.">
 ```

@@ -1,6 +1,6 @@
 ---
 name: code-team-init
-description: Sets up which AI model each kind of coding work runs on, a small model for searching and reading files, a mid model for side tasks and a top model for planning, to cut token spend on all AI coding, not only reviews. Works in OpenCode, Claude Code, Cursor and GitHub Copilot, globally by default or for one project. Offers three spend profiles (Economy, Balanced, Max) and creates the review-small, review-mid and review-top agents the code-review-team skill uses. Use for "set up my models", "save tokens", "configure agents", "configure models", "init code team", "use max models" or "init this project". Shows every change and asks before writing anything.
+description: Sets up which AI model each kind of coding work runs on, a small model for searching and reading files, a mid model for side tasks and a top model for planning, to cut token spend on all AI coding, not only reviews. Works in OpenCode, Claude Code, Cursor and GitHub Copilot, globally by default or for one project. Offers three spend profiles (Economy, Balanced, Max) and creates the review-small, review-mid and review-top agents the code-review-team skill uses, plus visual and security reviewers under Max, spread across the vendors the user can really use. Use for "set up my models", "save tokens", "configure agents", "configure models", "init code team", "use max models" or "init this project". Shows every change and asks before writing anything.
 ---
 
 # Code Review Team init: the right model for each job
@@ -21,9 +21,24 @@ Check which exist: config folders `~/.config/opencode`, `~/.claude`, `~/.cursor`
 
 List what the user can really use, per tool (commands in each reference file): `opencode models`; Claude Code aliases `haiku`, `sonnet`, `opus`, `fable`; Cursor `agent --list-models`; Copilot has no list command, so ask the user to read their model picker. When a tool can't list models, show the tiers to fill (small, mid, top, max) and ask the user to pick one model for each. **Never propose a model the user can't access.**
 
-- **small**: the cheapest capable model (Haiku class). **mid**: Sonnet class. **top**: Opus class.
-- **max**: the strongest model available: Claude Fable (e.g. `claude-fable-5-1`) or GPT-6 Astra (`gpt-6-astra`). Neither available: max = top. Say so before applying.
-- Prefer one provider per tool, the one the user's main model already uses. If the list has no models from that provider, don't fill tiers from other providers' models: ask the user which models to use.
+Ladders as of 2026-11 (always take the **newest listed version** of each family, so a newer release replaces these names):
+
+| Tier | Anthropic | OpenAI | Google |
+|---|---|---|---|
+| small | Haiku (`claude-haiku-5-5`) | the cheapest GPT the user lists | Flash-Lite (`gemini-3.5-flash-lite`) |
+| mid | Sonnet (`claude-sonnet-5-5`) | Sol (`gpt-6.2-sol`) | Flash (`gemini-3.8-flash`) |
+| top | Opus (`claude-opus-5-5`) | Astra (`gpt-6.2-astra`) | Neon (`gemini-4-neon`) |
+| max | Fable (`claude-fable-5-2`) | Astra (`gpt-6.2-astra`) | none: top |
+
+Strengths, for the review panel under **Max** only (first one the user can use wins):
+- **visual** (UI & accessibility reviewer): GPT Astra, then Claude Fable, else the top model. Astra leads web-design rankings; Fable is close behind.
+- **security** (hacker on security code): Claude Fable, then GPT Astra, else the max model. **GPT-6 Cyber** goes first only when the user's list has it **and** the user says yes when asked ("You have GPT-6 Cyber. Use it for the security reviewer in Max? It's built for finding vulnerabilities; OpenAI rates it high-risk and gates access."). Never offer it otherwise.
+
+**Mixed vendors (on by default).** When the user can use models from two or more vendors in a tool, fill the panel's `review-*` agents so they don't all share one model family (different families miss different bugs): `review-mid` and `review-top` from a vendor other than the user's main model where that vendor has the tier, and the strengths as above. Search, `general` and planning agents stay on the main model's vendor. The user can say "one vendor" to turn it off.
+
+**Only models the user can really use.** A model in a list may still be refused (plan, credits, gated access). Before writing, check each model you are about to put in a file once with a one-line prompt, after telling the user it costs a few tokens (OpenCode: `opencode run -m <provider/model> "Reply OK"`; elsewhere ask the user to confirm it works in their picker). Drop any that fail and take the next on its list; never write a model that failed. The review skill still falls back at run time if a model is refused later.
+
+- If the list has no models from the main provider, don't guess: ask the user which models to use per tier.
 
 ## Step 3: Ask the profile
 
@@ -36,8 +51,8 @@ Ask once: **"Economy, Balanced or Max?"** Default **Balanced**. Show this table:
 | Max | small | mid | top | **max** | **max** |
 
 - Search stays small in every profile: a bigger model doesn't find files better, only slower.
-- Before applying Max, say: "Fable and Astra cost about 2.5x Opus per token." Also suggest starting the session itself on the max model, since the lead runs on the session's model and no setting here changes it.
-- Each `review-<tier>` agent runs on **its own tier's model** (`review-mid` = mid model). The review skill reads the profile and picks which agent each reviewer gets, so never shift the agents' models by profile. `review-max` is created only under Max.
+- Before applying Max, say: "Fable and Astra cost about 2x Opus per token, though Fable at High effort often matches Opus at Max for less per task." Also suggest starting the session itself on the max model, since the lead runs on the session's model and no setting here changes it.
+- Each `review-<tier>` agent runs on **its own tier's model** (`review-mid` = mid model). The review skill reads the profile and picks which agent each reviewer gets, so never shift the agents' models by profile. `review-max`, `review-visual` and `review-security` are created only under Max, and the last two only when a strength model from Step 2 passed the check.
 
 ## Step 4: Propose, per tool
 
@@ -50,7 +65,7 @@ Fill this table through the profile and the Step 2 models, and show it:
 | Multi-step side tasks | mid | built-in `general` | built in, skip | built in, skip | `general` agent + routing line |
 | Writing code | user's main model | `build`: shown, not changed | `model`: shown, not changed | none | none |
 | Planning, hard problems | profile's Planning column | built-in `plan` | optional `opusplan` | none | none |
-| Review panel | own tier | `review-small/mid/top` (+ `review-max`) | none (per-call `model`) | `review-small/mid/top` (+ `review-max`) | `review-small/mid/top` (+ `review-max`) |
+| Review panel | own tier or strength | `review-small/mid/top` (+ Max: `review-max`, `review-visual`, `review-security`) | none (per-call `model`; one vendor) | same as OpenCode | same as OpenCode |
 | Profile line | none | marked block | marked block | marked block | marked block |
 
 - Replace a tool's built-in agents by name only in OpenCode, where re-modelling built-ins is the documented way, and Claude Code's `Explore`: its built-in runs on the main model (Opus or Fable), so searching is where the biggest saving is. Say in the proposal that this overrides the built-in.

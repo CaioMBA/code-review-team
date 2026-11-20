@@ -15,7 +15,7 @@ Never write Cursor agents to `~/.claude/agents` or `.claude/agents`: Cursor read
 
 - `agent --list-models` (older installs: `cursor-agent --list-models`) or `agent models` lists the models the account can use. Pick only from it. If the CLI isn't installed, ask the user to read the model picker and give one model ID per tier.
 - Agent `model`: `inherit` (default) or a model ID, e.g. `composer-2`, `claude-opus-5`. Bracket options are allowed, e.g. `claude-opus-5[effort=high]`; don't add them unless the user asks.
-- max: a Fable or GPT-6 Astra ID from the list, else the top model.
+- max: a Fable or GPT Astra ID from the list, else the top model.
 
 ## Built-ins
 
@@ -38,7 +38,7 @@ Search and read the codebase for what you are asked. Return the relevant file pa
 
 ## Example: review agent
 
-`~/.cursor/agents/review-mid.md` (same for `review-small`, `review-top`, and `review-max` under Max only, each with its own tier's model):
+`~/.cursor/agents/review-mid.md` (same for `review-small`, `review-top`, and, under Max only, `review-max`, `review-visual` and `review-security` (the last two when Step 2 picked a strength model), each with its own model):
 
 ```markdown
 ---

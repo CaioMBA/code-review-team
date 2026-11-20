@@ -14,7 +14,7 @@ Use whichever config file already exists (`.json` or `.jsonc`); if neither does,
 
 ## Model IDs and listing
 
-- Format `provider/model-id`, e.g. `anthropic/claude-haiku-5-5`, `anthropic/claude-sonnet-5-5`, `anthropic/claude-opus-5-5`, `anthropic/claude-fable-5-1`, `openai/gpt-6-astra`.
+- Format `provider/model-id`, e.g. `anthropic/claude-haiku-5-5`, `anthropic/claude-sonnet-5-5`, `anthropic/claude-opus-5-5`, `anthropic/claude-fable-5-2`, `openai/gpt-6.2-astra`.
 - `opencode models` lists the models the user can use. Pick only from it. Prefer the provider of the current top-level `model`.
 - `opencode agent list` shows the loaded agents and is a good check after writing.
 
@@ -66,7 +66,7 @@ After (only the `agent` key added; if `agent` exists, add or change only the `mo
 
 ## Example: agent file
 
-`~/.config/opencode/agents/review-mid.md` (the file name is the agent name). Same for `review-small`, `review-top` and, under Max only, `review-max`, each with its own tier's model:
+`~/.config/opencode/agents/review-mid.md` (the file name is the agent name). Same for `review-small`, `review-top` and, under Max only, `review-max`, `review-visual` and `review-security` (the last two when Step 2 picked a strength model), each with its own model:
 
 ```markdown
 ---

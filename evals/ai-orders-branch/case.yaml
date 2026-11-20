@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: ai-orders-branch
+context:
+  scaffold_script: place-files.sh
+expected_outcome: |
+  Structure joins (AI-written, ~180 lines). It flags that the bulk-discount rule exists in checkout.py and invoice.py and has already drifted (100 vs 50 threshold) as HIGH with both file:lines, the one-customer special case (customer 42 gets half price), the sleep that waits for a file another function writes, and the pass-through EnhancedOrderServiceV2 wrapper / AI-code signs as LOW. Verdict REJECTED. No tracked file changed. English.
